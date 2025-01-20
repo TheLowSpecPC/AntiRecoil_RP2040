@@ -13,4 +13,4 @@ def LoadPattern(filename):
 
     return(patterns)
 
-print(LoadPattern('Patterns/FCAR.txt'))
+print(LoadPattern('Patterns/M11.txt'))
