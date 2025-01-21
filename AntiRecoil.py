@@ -27,41 +27,41 @@ def LoadPattern(filename):
 
     return(patterns)
 
-akm = [LoadPattern('Patterns/AKM.txt'), 99/1000]
-fcar = [LoadPattern('Patterns/FCAR.txt'), 111/1000]
-xp54 = [LoadPattern('Patterns/XP54.txt'), 68/1000]
-m60 = [LoadPattern('Patterns/M60.txt'), 100/1000]
-famas = [LoadPattern('Patterns/FAMAS.txt'), 52/1000]
-lewisgun = [LoadPattern('Patterns/LGUN.txt'), 114/1000]
-m11 = [LoadPattern('Patterns/M11.txt'), 60/1000]
-r93 = [LoadPattern('Patterns/93R.txt'), 64/1000]
+akm = [LoadPattern('Patterns/AKM.txt'), 99]
+fcar = [LoadPattern('Patterns/FCAR.txt'), 111]
+xp54 = [LoadPattern('Patterns/XP54.txt'), 68]
+m60 = [LoadPattern('Patterns/M60.txt'), 100]
+famas = [LoadPattern('Patterns/FAMAS.txt'), 52]
+lewisgun = [LoadPattern('Patterns/LGUN.txt'), 114]
+m11 = [LoadPattern('Patterns/M11.txt'), 60]
+r93 = [LoadPattern('Patterns/93R.txt'), 64]
 
 gunsSelect = [akm, fcar, xp54, m60, famas, lewisgun, m11, r93]
 gun = []
 
 def SetGun(name):
-    if name == "AKM":
+    if name == "1":
         print("AKM Selected\n")
         return gunsSelect[0]
-    elif name == "FCAR":
+    elif name == "2":
         print("FCAR Selected\n")
         return gunsSelect[1]
-    elif name == "XP54":
+    elif name == "3":
         print("XP54 Selected\n")
         return gunsSelect[2]
-    elif name == "M60":
+    elif name == "4":
         print("M60 Selected\n")
         return gunsSelect[3]
-    elif name == "Famas":
+    elif name == "5":
         print("Famas Selected\n")
         return gunsSelect[4]
-    elif name == "LewisGun":
+    elif name == "6":
         print("LewisGun Selected\n")
         return gunsSelect[5]
-    elif name == "M11":
+    elif name == "7":
         print("M11 Selected\n")
         return gunsSelect[6]
-    elif name == "93R":
+    elif name == "8":
         print("93R Selected\n")
         return gunsSelect[7]
     else:
@@ -76,20 +76,15 @@ def main():
         gun = SetGun(name)
 
         while True:
-            if(MLB.value and MRB.value):
+            if(MLB.value and MLB.value):
                 for i in range(len(gun[0])):
-#                    if(i==0):
-#                        m.press(Mouse.RIGHT_BUTTON)
-#                        time.sleep(1)
-                        
-#                    m.press(Mouse.LEFT_BUTTON)
+                    print(i)
                     m.move(x=gun[0][i][0], y=gun[0][i][1])
-                    time.sleep(gun[1])
+                    time.sleep(gun[1]/1000)
+                    print(f"x={gun[0][i][0]}, y={gun[0][i][1]}")
                     
                     if(MLB.value == False or MRB.value == False):
-#                        m.release(Mouse.LEFT_BUTTON)
-#                        m.release(Mouse.RIGHT_BUTTON)
                         break
-
+                    
 if __name__ == '__main__':
     main()
