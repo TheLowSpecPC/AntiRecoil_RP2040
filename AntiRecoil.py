@@ -4,13 +4,13 @@ from adafruit_hid.mouse import Mouse
 
 m = Mouse(usb_hid.devices)
 
-MLB = digitalio.DigitalInOut(board.GP28)
+MLB = digitalio.DigitalInOut(board.GP16)
 MLB.direction = digitalio.Direction.INPUT
-MLB.pull = digitalio.Pull.DOWN
+MLB.pull = digitalio.Pull.UP
 
-MRB = digitalio.DigitalInOut(board.GP27)
+MRB = digitalio.DigitalInOut(board.GP17)
 MRB.direction = digitalio.Direction.INPUT
-MRB.pull = digitalio.Pull.DOWN
+MRB.pull = digitalio.Pull.UP
 
 sensitivity = 50
 
@@ -76,14 +76,11 @@ def main():
         gun = SetGun(name)
 
         while True:
-            if(MLB.value and MLB.value):
+            if(MLB.value == False and MRB.value == False):
                 for i in range(len(gun[0])):
-                    print(i)
                     m.move(x=gun[0][i][0], y=gun[0][i][1])
                     time.sleep(gun[1]/1000)
-                    print(f"x={gun[0][i][0]}, y={gun[0][i][1]}")
-                    
-                    if(MLB.value == False or MRB.value == False):
+                    if(MLB.value or MRB.value):
                         break
                     
 if __name__ == '__main__':
