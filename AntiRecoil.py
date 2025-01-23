@@ -12,7 +12,7 @@ MRB = digitalio.DigitalInOut(board.GP17)
 MRB.direction = digitalio.Direction.INPUT
 MRB.pull = digitalio.Pull.UP
 
-sensitivity = 50
+sensitivity = 52
 
 def LoadPattern(filename):
     yaw = sensitivity * 0.00101
