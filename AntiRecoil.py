@@ -73,7 +73,7 @@ def SetGun(name):
         return [LoadPattern('Patterns/TheFinals/93R.txt'), 64]
     elif name == "0":
         print("Default Selected\n")
-        return [LoadPattern('Patterns/Default.txt'), 100]
+        return [LoadPattern('Patterns/Default.txt'), 80]
     else:
         print("Enter valid Gun\n")
         return SetGun(input())
@@ -111,8 +111,8 @@ def main():
                     sen.close()
                     
                 if FWB.fell:
-                    if sensitivity > 5:
-                        sensitivity = sensitivity-5
+                    if sensitivity > 4:
+                        sensitivity = sensitivity-4
                     print(sensitivity)
                     with open('Patterns/Sensitivity.txt', 'w') as sen:
                         sen.write(str(sensitivity))
@@ -120,7 +120,7 @@ def main():
                     gun = SetGun(name)
                     
                 if BWB.fell:
-                    sensitivity = sensitivity+5
+                    sensitivity = sensitivity+4
                     print(sensitivity)
                     with open('Patterns/Sensitivity.txt', 'w') as sen:
                         sen.write(str(sensitivity))
