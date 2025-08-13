@@ -83,7 +83,7 @@ def main():
     while True:
         name = ""
         check = False
-        print("Enter Options:\n 0.Default\n 1.AKM\n 2.FCAR\n 3.XP54\n 4.M60\n 5.Famas\n 6.LewisGun\n 7.M11\n 8.93R\n")
+        print("Enter Options: \n\nThe Finals: \n0.Default, 1.AKM, 2.FCAR, 3.XP54, 4.M60, 5.Famas, 6.LewisGun, 7.M11, 8.93R\n")
         name = input()
         gun = SetGun(name)
 

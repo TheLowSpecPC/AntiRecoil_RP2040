@@ -1,0 +1,14 @@
+ARs:		SMGs:		LMGs:
+AKM = 22	UMP = 26	DP-28 = 26
+BerylM763 = 18	PP Bizon = 34	M249 = 26
+M416 = 22	Tommy Gun = 26	MG3 = 54
+G36C = 18	Micro UZI = 26
+M16A4 = 26	Vector = 22
+SCAR-L = 22	MP5K = 26
+MK47 = 32	P90 = 26
+QBZ = 26	JS9 = 30
+AUG = 22	MP9 = 30
+Groza = 22	
+ACE32 = 18	
+K2 = 22		
+Famas = 26	
