@@ -28,21 +28,24 @@ BWB.direction = digitalio.Direction.INPUT
 BWB.pull = digitalio.Pull.UP
 BWB = Debouncer(BWB)
 
-def LoadPattern(filename):
-    with open(filename, 'r') as file:
+def LoadPattern(*filename):
+    filename = list(filename)
+    with open(filename[0], 'r') as file:
         patterns = file.readlines()
         file.close()
-    with open('Patterns/Sensitivity.txt', 'r') as sen:
-        sensitive = sen.read()
-        sensitivity = float(sensitive)
-        sen.close()
         
+    sensitivity = 66.0
     yaw = sensitivity * 0.00101
+    
+    if 2 > len(filename):
+        filename.append(0)
 
     for i in range(len(patterns)):
         patterns[i] = patterns[i].strip('\n').split(', ')
         patterns[i][0] = round(float(patterns[i][0])/yaw)
-        patterns[i][1] = round(float(patterns[i][1])/yaw)
+        patterns[i][1] = round((float(patterns[i][1])+filename[1])/yaw)
+        if i==0:
+            patterns[i][1] = 0
 
     return(patterns)
 
@@ -73,7 +76,10 @@ def SetGun(name):
         return [LoadPattern('Patterns/TheFinals/93R.txt'), 64]
     elif name == "0":
         print("Default Selected\n")
-        return [LoadPattern('Patterns/Default.txt'), 80]
+        with open('Patterns/DefaultSen.txt', 'r') as pat:
+            yPos = float(pat.read())
+            pat.close()
+        return [LoadPattern('Patterns/Default.txt', yPos), 80]
     else:
         print("Enter valid Gun\n")
         return SetGun(input())
@@ -105,26 +111,25 @@ def main():
                     check = True
                     
             if check:
-                with open('Patterns/Sensitivity.txt', 'r') as sen:
-                    sensitive = sen.read()
-                    sensitivity = float(sensitive)
-                    sen.close()
+                with open('Patterns/DefaultSen.txt', 'r') as pat:
+                    yPos = float(pat.read())
+                    pat.close()
                     
                 if FWB.fell:
-                    if sensitivity > 4:
-                        sensitivity = sensitivity-4
-                    print(sensitivity)
-                    with open('Patterns/Sensitivity.txt', 'w') as sen:
-                        sen.write(str(sensitivity))
-                        sen.close()
+                    if yPos > 0.1:
+                        yPos = yPos-0.1
+                    print(yPos)
+                    with open('Patterns/DefaultSen.txt', 'w') as pat:
+                        pat.write(str(yPos))
+                        pat.close()
                     gun = SetGun(name)
                     
                 if BWB.fell:
-                    sensitivity = sensitivity+4
-                    print(sensitivity)
-                    with open('Patterns/Sensitivity.txt', 'w') as sen:
-                        sen.write(str(sensitivity))
-                        sen.close()
+                    yPos = yPos+0.1
+                    print(yPos)
+                    with open('Patterns/DefaultSen.txt', 'w') as pat:
+                        pat.write(str(yPos))
+                        pat.close()
                     gun = SetGun(name)
                     
 if __name__ == '__main__':

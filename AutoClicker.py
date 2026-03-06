@@ -24,8 +24,10 @@ def main():
         if Check.fell:
             if flag:
                 flag = False
+                print("Activated")
             else:
                 flag = True
+                print("Deactivated")
         
         if(MLB.value==False and flag==False):
             m.press(Mouse.LEFT_BUTTON)
