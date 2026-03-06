@@ -116,8 +116,7 @@ def main():
                     pat.close()
                     
                 if FWB.fell:
-                    if yPos > 0.1:
-                        yPos = yPos-0.1
+                    yPos = yPos+0.1
                     print(yPos)
                     with open('Patterns/DefaultSen.txt', 'w') as pat:
                         pat.write(str(yPos))
@@ -125,7 +124,8 @@ def main():
                     gun = SetGun(name)
                     
                 if BWB.fell:
-                    yPos = yPos+0.1
+                    if yPos > 0.1:
+                        yPos = yPos-0.1
                     print(yPos)
                     with open('Patterns/DefaultSen.txt', 'w') as pat:
                         pat.write(str(yPos))
