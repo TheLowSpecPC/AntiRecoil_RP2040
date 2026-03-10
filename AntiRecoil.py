@@ -1,32 +1,43 @@
-import time, board, digitalio, storage
+import time, board, digitalio, storage, busio
 import usb_hid
 from adafruit_hid.mouse import Mouse
 from adafruit_debouncer import Debouncer
 
 m = Mouse(usb_hid.devices)
 
-MLB = digitalio.DigitalInOut(board.GP16)
-MLB.direction = digitalio.Direction.INPUT
-MLB.pull = digitalio.Pull.UP
+# Initialize UART on UART0 
+# TX = GP12, RX = GP13 (Matching the hardware wiring)
+uart = busio.UART(board.GP12, board.GP13, baudrate=115200, receiver_buffer_size=64, timeout=0.1)
 
-MRB = digitalio.DigitalInOut(board.GP17)
-MRB.direction = digitalio.Direction.INPUT
-MRB.pull = digitalio.Pull.UP
+MLB, MRB, MMB, FWB, BWB, x, y, wheel = False, False, False, False, False, 0, 0, 0
+def MouseCon():
+    global MLB, MRB, MMB, FWB, BWB, x, y, wheel
+    waiting = uart.in_waiting # Check how many bytes are waiting in the hardware buffer
 
-MMB = digitalio.DigitalInOut(board.GP20)
-MMB.direction = digitalio.Direction.INPUT
-MMB.pull = digitalio.Pull.UP
-MMB = Debouncer(MMB)
+    if waiting >= 4:
+        all_data = uart.read(waiting) # Read everything in the buffer to clear out the backlog instantly
+        data = all_data[-4:]          # Slice the array to keep ONLY the most recent 4 bytes (the latest state)
+        
+        btn_byte = data[0]
+        MLB = bool(btn_byte & (1 << 0)) # 1st bit from right
+        MRB = bool(btn_byte & (1 << 1)) # 2nd bit
+        MMB = bool(btn_byte & (1 << 2)) # 3rd bit
+        BWB = bool(btn_byte & (1 << 3)) # 4th bit
+        FWB = bool(btn_byte & (1 << 4)) # 5th bit
 
-FWB = digitalio.DigitalInOut(board.GP18)
-FWB.direction = digitalio.Direction.INPUT
-FWB.pull = digitalio.Pull.UP
-FWB = Debouncer(FWB)
+        x = data[1] - 256 if (data[1] & 0x80) else data[1]
+        y = data[2] - 256 if (data[2] & 0x80) else data[2]
+        wheel = data[3] - 256 if (data[3] & 0x80) else data[3]
+            
+    #[[Left, Right, Middle, Forward Backward], x, y, wheel]
+    return [[MLB, MRB, MMB, FWB, BWB], x, y, wheel]
 
-BWB = digitalio.DigitalInOut(board.GP19)
-BWB.direction = digitalio.Direction.INPUT
-BWB.pull = digitalio.Pull.UP
-BWB = Debouncer(BWB)
+def get_mmb(): return MouseCon()[0][2]
+def get_fwb(): return MouseCon()[0][3]
+def get_bwb(): return MouseCon()[0][4]
+
+DMMB, DFWB, DBWB = Debouncer(get_mmb), Debouncer(get_fwb), Debouncer(get_bwb)
+    
 
 def LoadPattern(*filename):
     filename = list(filename)
@@ -48,6 +59,7 @@ def LoadPattern(*filename):
             patterns[i][1] = 0
 
     return(patterns)
+
 
 def SetGun(name):
     if name == "1":
@@ -83,6 +95,7 @@ def SetGun(name):
     else:
         print("Enter valid Gun\n")
         return SetGun(input())
+    
 
 gun = []
 def main():
@@ -94,17 +107,18 @@ def main():
         gun = SetGun(name)
 
         while True:
-            FWB.update()
-            BWB.update()
-            MMB.update()
-            if not(MLB.value and MRB.value):
+            DMMB.update()
+            DFWB.update()
+            DBWB.update()
+            
+            if MouseCon()[0][0] and MouseCon()[0][1]:
                 for i in range(len(gun[0])):
                     m.move(x=gun[0][i][0], y=gun[0][i][1])
                     time.sleep(gun[1]/1000)
-                    if(MLB.value or MRB.value):
+                    if not(MouseCon()[0][0]) or not(MouseCon()[0][1]):
                         break
                     
-            if MMB.fell:
+            if DMMB.rose:
                 if check:
                     check = False
                 else:
@@ -115,7 +129,7 @@ def main():
                     yPos = float(pat.read())
                     pat.close()
                     
-                if FWB.fell:
+                if DFWB.rose:
                     yPos = yPos+0.1
                     print(yPos)
                     with open('Patterns/DefaultSen.txt', 'w') as pat:
@@ -123,7 +137,7 @@ def main():
                         pat.close()
                     gun = SetGun(name)
                     
-                if BWB.fell:
+                if DBWB.rose:
                     if yPos > 0.1:
                         yPos = yPos-0.1
                     print(yPos)
@@ -131,6 +145,7 @@ def main():
                         pat.write(str(yPos))
                         pat.close()
                     gun = SetGun(name)
+                    
                     
 if __name__ == '__main__':
     main()
