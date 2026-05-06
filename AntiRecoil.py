@@ -30,8 +30,8 @@ def MouseCon():
     return [buttons, x, y, wheel]
 
 def get_mmb(): return MouseCon()[0][2]
-def get_fwb(): return MouseCon()[0][3]
-def get_bwb(): return MouseCon()[0][4]
+def get_bwb(): return MouseCon()[0][3]
+def get_fwb(): return MouseCon()[0][4]
 
 DMMB, DFWB, DBWB = Debouncer(get_mmb), Debouncer(get_fwb), Debouncer(get_bwb)
     
