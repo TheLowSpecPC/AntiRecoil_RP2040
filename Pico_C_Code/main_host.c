@@ -211,10 +211,10 @@ static void process_mouse_report(uint8_t dev_addr, hid_mouse_report_t const * re
   tud_hid_mouse_report(REPORT_ID_MOUSE, report->buttons, report->x, report->y, report->wheel, 0);
 
   // The 4 bytes of data to be send to 2nd pico
-  uint8_t payload[4] = {report->buttons, report->x, report->y, report->wheel};
+  uint8_t payload[6] = {0xAA, 0x55, report->buttons, report->x, report->y, report->wheel};
 
   // Send the 4 bytes, blocking until they are all written to the UART FIFO
-  uart_write_blocking(UART_ID, payload, 4);
+  uart_write_blocking(UART_ID, payload, 6);
 
   //------------- button state  -------------//
   //uint8_t button_changed_mask = report->buttons ^ prev_report.buttons;

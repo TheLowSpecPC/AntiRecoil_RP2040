@@ -37,23 +37,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
  16 .comment      00000045  00000000  00000000  00011238  2**0
                   CONTENTS, READONLY
- 17 .debug_info   00052961  00000000  00000000  0001127d  2**0
+ 17 .debug_info   0005294f  00000000  00000000  0001127d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_abbrev 0000b84f  00000000  00000000  00063bde  2**0
+ 18 .debug_abbrev 0000b844  00000000  00000000  00063bcc  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_loclists 00033375  00000000  00000000  0006f42d  2**0
+ 19 .debug_loclists 00033381  00000000  00000000  0006f410  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_aranges 00001c98  00000000  00000000  000a27a8  2**3
+ 20 .debug_aranges 00001c98  00000000  00000000  000a2798  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_rnglists 00007755  00000000  00000000  000a4440  2**0
+ 21 .debug_rnglists 00007773  00000000  00000000  000a4430  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 22 .debug_line   0003837b  00000000  00000000  000abb95  2**0
+ 22 .debug_line   000383af  00000000  00000000  000abba3  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 23 .debug_str    0000d979  00000000  00000000  000e3f10  2**0
+ 23 .debug_str    0000d979  00000000  00000000  000e3f52  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 24 .debug_frame  00004c4c  00000000  00000000  000f188c  2**2
+ 24 .debug_frame  00004c4c  00000000  00000000  000f18cc  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 25 .debug_line_str 00000351  00000000  00000000  000f64d8  2**0
+ 25 .debug_line_str 00000351  00000000  00000000  000f6518  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 C:/Users/ASUS/PycharmProjects/AntiRecoil_RP2040/Pico_C_Code/build/USB_HID_Sniffer.elf:     file format elf32-littlearm
@@ -519,7 +519,7 @@ Disassembly of section .text:
 10000484:	f009 f98e 	bl	100097a4 <tuh_hid_interface_protocol>
 10000488:	2801      	cmp	r0, #1
 1000048a:	d100      	bne.n	1000048e <tuh_hid_report_received_cb+0x1e>
-1000048c:	e08c      	b.n	100005a8 <tuh_hid_report_received_cb+0x138>
+1000048c:	e08b      	b.n	100005a6 <tuh_hid_report_received_cb+0x136>
 1000048e:	2802      	cmp	r0, #2
 10000490:	d00d      	beq.n	100004ae <tuh_hid_report_received_cb+0x3e>
 10000492:	0039      	movs	r1, r7
@@ -527,7 +527,7 @@ Disassembly of section .text:
 10000496:	f009 f99b 	bl	100097d0 <tuh_hid_receive_report>
 1000049a:	2800      	cmp	r0, #0
 1000049c:	d100      	bne.n	100004a0 <tuh_hid_report_received_cb+0x30>
-1000049e:	e07e      	b.n	1000059e <tuh_hid_report_received_cb+0x12e>
+1000049e:	e07d      	b.n	1000059c <tuh_hid_report_received_cb+0x12c>
 100004a0:	b015      	add	sp, #84	@ 0x54
 100004a2:	bcf0      	pop	{r4, r5, r6, r7}
 100004a4:	46bb      	mov	fp, r7
@@ -546,406 +546,405 @@ Disassembly of section .text:
 100004be:	9101      	str	r1, [sp, #4]
 100004c0:	2102      	movs	r1, #2
 100004c2:	5661      	ldrsb	r1, [r4, r1]
-100004c4:	ad0b      	add	r5, sp, #44	@ 0x2c
+100004c4:	ad0a      	add	r5, sp, #40	@ 0x28
 100004c6:	9100      	str	r1, [sp, #0]
 100004c8:	2102      	movs	r1, #2
 100004ca:	f006 fddd 	bl	10007088 <tud_hid_n_mouse_report>
-100004ce:	2302      	movs	r3, #2
-100004d0:	56e3      	ldrsb	r3, [r4, r3]
-100004d2:	2001      	movs	r0, #1
-100004d4:	469c      	mov	ip, r3
-100004d6:	2303      	movs	r3, #3
+100004ce:	4bcb      	ldr	r3, [pc, #812]	@ (100007fc <tuh_hid_report_received_cb+0x38c>)
+100004d0:	7821      	ldrb	r1, [r4, #0]
+100004d2:	802b      	strh	r3, [r5, #0]
+100004d4:	2301      	movs	r3, #1
+100004d6:	70a9      	strb	r1, [r5, #2]
 100004d8:	56e3      	ldrsb	r3, [r4, r3]
-100004da:	7821      	ldrb	r1, [r4, #0]
-100004dc:	4699      	mov	r9, r3
-100004de:	7863      	ldrb	r3, [r4, #1]
-100004e0:	78a2      	ldrb	r2, [r4, #2]
-100004e2:	021b      	lsls	r3, r3, #8
-100004e4:	430b      	orrs	r3, r1
-100004e6:	0412      	lsls	r2, r2, #16
-100004e8:	431a      	orrs	r2, r3
-100004ea:	78e3      	ldrb	r3, [r4, #3]
-100004ec:	5620      	ldrsb	r0, [r4, r0]
-100004ee:	061b      	lsls	r3, r3, #24
-100004f0:	4313      	orrs	r3, r2
-100004f2:	930b      	str	r3, [sp, #44]	@ 0x2c
-100004f4:	ab0c      	add	r3, sp, #48	@ 0x30
-100004f6:	4698      	mov	r8, r3
-100004f8:	2420      	movs	r4, #32
-100004fa:	4ac1      	ldr	r2, [pc, #772]	@ (10000800 <tuh_hid_report_received_cb+0x390>)
-100004fc:	6993      	ldr	r3, [r2, #24]
-100004fe:	421c      	tst	r4, r3
-10000500:	d1fc      	bne.n	100004fc <tuh_hid_report_received_cb+0x8c>
-10000502:	782b      	ldrb	r3, [r5, #0]
-10000504:	3501      	adds	r5, #1
-10000506:	6013      	str	r3, [r2, #0]
-10000508:	45a8      	cmp	r8, r5
-1000050a:	d1f7      	bne.n	100004fc <tuh_hid_report_received_cb+0x8c>
-1000050c:	2301      	movs	r3, #1
-1000050e:	221e      	movs	r2, #30
-10000510:	400b      	ands	r3, r1
-10000512:	3b01      	subs	r3, #1
-10000514:	4393      	bics	r3, r2
-10000516:	469a      	mov	sl, r3
-10000518:	234c      	movs	r3, #76	@ 0x4c
-1000051a:	3a1a      	subs	r2, #26
-1000051c:	400a      	ands	r2, r1
-1000051e:	469b      	mov	fp, r3
-10000520:	2402      	movs	r4, #2
-10000522:	4253      	negs	r3, r2
-10000524:	415a      	adcs	r2, r3
-10000526:	231f      	movs	r3, #31
-10000528:	400c      	ands	r4, r1
-1000052a:	4252      	negs	r2, r2
-1000052c:	439a      	bics	r2, r3
-1000052e:	2510      	movs	r5, #16
-10000530:	4263      	negs	r3, r4
-10000532:	415c      	adcs	r4, r3
-10000534:	2324      	movs	r3, #36	@ 0x24
-10000536:	400d      	ands	r5, r1
-10000538:	4264      	negs	r4, r4
-1000053a:	439c      	bics	r4, r3
-1000053c:	426b      	negs	r3, r5
-1000053e:	415d      	adcs	r5, r3
-10000540:	2318      	movs	r3, #24
-10000542:	426d      	negs	r5, r5
-10000544:	439d      	bics	r5, r3
-10000546:	3b10      	subs	r3, #16
-10000548:	400b      	ands	r3, r1
-1000054a:	4259      	negs	r1, r3
-1000054c:	414b      	adcs	r3, r1
-1000054e:	2114      	movs	r1, #20
-10000550:	425b      	negs	r3, r3
-10000552:	438b      	bics	r3, r1
-10000554:	49ab      	ldr	r1, [pc, #684]	@ (10000804 <tuh_hid_report_received_cb+0x394>)
-10000556:	324d      	adds	r2, #77	@ 0x4d
-10000558:	9109      	str	r1, [sp, #36]	@ 0x24
-1000055a:	4649      	mov	r1, r9
-1000055c:	9106      	str	r1, [sp, #24]
-1000055e:	4661      	mov	r1, ip
+100004da:	2026      	movs	r0, #38	@ 0x26
+100004dc:	70eb      	strb	r3, [r5, #3]
+100004de:	469a      	mov	sl, r3
+100004e0:	2302      	movs	r3, #2
+100004e2:	56e3      	ldrsb	r3, [r4, r3]
+100004e4:	4ac6      	ldr	r2, [pc, #792]	@ (10000800 <tuh_hid_report_received_cb+0x390>)
+100004e6:	712b      	strb	r3, [r5, #4]
+100004e8:	469c      	mov	ip, r3
+100004ea:	2303      	movs	r3, #3
+100004ec:	56e3      	ldrsb	r3, [r4, r3]
+100004ee:	2420      	movs	r4, #32
+100004f0:	4698      	mov	r8, r3
+100004f2:	716b      	strb	r3, [r5, #5]
+100004f4:	ab02      	add	r3, sp, #8
+100004f6:	4699      	mov	r9, r3
+100004f8:	4448      	add	r0, r9
+100004fa:	6993      	ldr	r3, [r2, #24]
+100004fc:	421c      	tst	r4, r3
+100004fe:	d1fc      	bne.n	100004fa <tuh_hid_report_received_cb+0x8a>
+10000500:	782b      	ldrb	r3, [r5, #0]
+10000502:	3501      	adds	r5, #1
+10000504:	6013      	str	r3, [r2, #0]
+10000506:	4285      	cmp	r5, r0
+10000508:	d1f7      	bne.n	100004fa <tuh_hid_report_received_cb+0x8a>
+1000050a:	2301      	movs	r3, #1
+1000050c:	221e      	movs	r2, #30
+1000050e:	400b      	ands	r3, r1
+10000510:	3b01      	subs	r3, #1
+10000512:	4393      	bics	r3, r2
+10000514:	4699      	mov	r9, r3
+10000516:	234c      	movs	r3, #76	@ 0x4c
+10000518:	3a1a      	subs	r2, #26
+1000051a:	400a      	ands	r2, r1
+1000051c:	469b      	mov	fp, r3
+1000051e:	2402      	movs	r4, #2
+10000520:	4253      	negs	r3, r2
+10000522:	415a      	adcs	r2, r3
+10000524:	231f      	movs	r3, #31
+10000526:	400c      	ands	r4, r1
+10000528:	4252      	negs	r2, r2
+1000052a:	439a      	bics	r2, r3
+1000052c:	2510      	movs	r5, #16
+1000052e:	4263      	negs	r3, r4
+10000530:	415c      	adcs	r4, r3
+10000532:	2324      	movs	r3, #36	@ 0x24
+10000534:	400d      	ands	r5, r1
+10000536:	4264      	negs	r4, r4
+10000538:	439c      	bics	r4, r3
+1000053a:	426b      	negs	r3, r5
+1000053c:	415d      	adcs	r5, r3
+1000053e:	2318      	movs	r3, #24
+10000540:	426d      	negs	r5, r5
+10000542:	439d      	bics	r5, r3
+10000544:	3b10      	subs	r3, #16
+10000546:	400b      	ands	r3, r1
+10000548:	4259      	negs	r1, r3
+1000054a:	414b      	adcs	r3, r1
+1000054c:	4640      	mov	r0, r8
+1000054e:	4259      	negs	r1, r3
+10000550:	2314      	movs	r3, #20
+10000552:	9006      	str	r0, [sp, #24]
+10000554:	4660      	mov	r0, ip
+10000556:	4399      	bics	r1, r3
+10000558:	000b      	movs	r3, r1
+1000055a:	9005      	str	r0, [sp, #20]
+1000055c:	4650      	mov	r0, sl
+1000055e:	324d      	adds	r2, #77	@ 0x4d
 10000560:	3342      	adds	r3, #66	@ 0x42
-10000562:	44da      	add	sl, fp
+10000562:	44d9      	add	r9, fp
 10000564:	3452      	adds	r4, #82	@ 0x52
 10000566:	3546      	adds	r5, #70	@ 0x46
-10000568:	9105      	str	r1, [sp, #20]
+10000568:	49a6      	ldr	r1, [pc, #664]	@ (10000804 <tuh_hid_report_received_cb+0x394>)
 1000056a:	9004      	str	r0, [sp, #16]
-1000056c:	9909      	ldr	r1, [sp, #36]	@ 0x24
-1000056e:	9303      	str	r3, [sp, #12]
-10000570:	9200      	str	r2, [sp, #0]
-10000572:	4653      	mov	r3, sl
-10000574:	0032      	movs	r2, r6
-10000576:	4640      	mov	r0, r8
-10000578:	9502      	str	r5, [sp, #8]
-1000057a:	9401      	str	r4, [sp, #4]
-1000057c:	f004 f960 	bl	10004840 <__wrap_sprintf>
-10000580:	4641      	mov	r1, r8
-10000582:	0002      	movs	r2, r0
-10000584:	2000      	movs	r0, #0
-10000586:	f006 fb53 	bl	10006c30 <tud_cdc_n_write>
-1000058a:	2000      	movs	r0, #0
-1000058c:	f006 fb12 	bl	10006bb4 <tud_cdc_n_write_flush>
-10000590:	0039      	movs	r1, r7
-10000592:	0030      	movs	r0, r6
-10000594:	f009 f91c 	bl	100097d0 <tuh_hid_receive_report>
-10000598:	2800      	cmp	r0, #0
-1000059a:	d000      	beq.n	1000059e <tuh_hid_report_received_cb+0x12e>
-1000059c:	e780      	b.n	100004a0 <tuh_hid_report_received_cb+0x30>
-1000059e:	221e      	movs	r2, #30
-100005a0:	4999      	ldr	r1, [pc, #612]	@ (10000808 <tuh_hid_report_received_cb+0x398>)
-100005a2:	f006 fb45 	bl	10006c30 <tud_cdc_n_write>
-100005a6:	e77b      	b.n	100004a0 <tuh_hid_report_received_cb+0x30>
-100005a8:	1ca3      	adds	r3, r4, #2
-100005aa:	2101      	movs	r1, #1
-100005ac:	2000      	movs	r0, #0
-100005ae:	7822      	ldrb	r2, [r4, #0]
-100005b0:	f006 fd28 	bl	10007004 <tud_hid_n_keyboard_report>
-100005b4:	78a3      	ldrb	r3, [r4, #2]
-100005b6:	2b00      	cmp	r3, #0
-100005b8:	d000      	beq.n	100005bc <tuh_hid_report_received_cb+0x14c>
-100005ba:	e12b      	b.n	10000814 <tuh_hid_report_received_cb+0x3a4>
-100005bc:	2200      	movs	r2, #0
-100005be:	4d93      	ldr	r5, [pc, #588]	@ (1000080c <tuh_hid_report_received_cb+0x39c>)
-100005c0:	78e3      	ldrb	r3, [r4, #3]
-100005c2:	2b00      	cmp	r3, #0
-100005c4:	d000      	beq.n	100005c8 <tuh_hid_report_received_cb+0x158>
-100005c6:	e0e6      	b.n	10000796 <tuh_hid_report_received_cb+0x326>
-100005c8:	7923      	ldrb	r3, [r4, #4]
-100005ca:	2b00      	cmp	r3, #0
-100005cc:	d000      	beq.n	100005d0 <tuh_hid_report_received_cb+0x160>
-100005ce:	e0ad      	b.n	1000072c <tuh_hid_report_received_cb+0x2bc>
-100005d0:	7963      	ldrb	r3, [r4, #5]
-100005d2:	2b00      	cmp	r3, #0
-100005d4:	d177      	bne.n	100006c6 <tuh_hid_report_received_cb+0x256>
-100005d6:	79a3      	ldrb	r3, [r4, #6]
-100005d8:	2b00      	cmp	r3, #0
-100005da:	d13a      	bne.n	10000652 <tuh_hid_report_received_cb+0x1e2>
-100005dc:	79e3      	ldrb	r3, [r4, #7]
-100005de:	2b00      	cmp	r3, #0
-100005e0:	d107      	bne.n	100005f2 <tuh_hid_report_received_cb+0x182>
-100005e2:	2a00      	cmp	r2, #0
-100005e4:	d131      	bne.n	1000064a <tuh_hid_report_received_cb+0x1da>
-100005e6:	2208      	movs	r2, #8
-100005e8:	0021      	movs	r1, r4
-100005ea:	0028      	movs	r0, r5
-100005ec:	f002 fcce 	bl	10002f8c <__wrap___aeabi_memcpy>
-100005f0:	e74f      	b.n	10000492 <tuh_hid_report_received_cb+0x22>
-100005f2:	78a9      	ldrb	r1, [r5, #2]
-100005f4:	4299      	cmp	r1, r3
-100005f6:	d0f4      	beq.n	100005e2 <tuh_hid_report_received_cb+0x172>
-100005f8:	78e9      	ldrb	r1, [r5, #3]
-100005fa:	4299      	cmp	r1, r3
-100005fc:	d0f1      	beq.n	100005e2 <tuh_hid_report_received_cb+0x172>
-100005fe:	7929      	ldrb	r1, [r5, #4]
-10000600:	4299      	cmp	r1, r3
-10000602:	d0ee      	beq.n	100005e2 <tuh_hid_report_received_cb+0x172>
-10000604:	7969      	ldrb	r1, [r5, #5]
-10000606:	4299      	cmp	r1, r3
-10000608:	d0eb      	beq.n	100005e2 <tuh_hid_report_received_cb+0x172>
-1000060a:	79a9      	ldrb	r1, [r5, #6]
-1000060c:	4299      	cmp	r1, r3
-1000060e:	d0e8      	beq.n	100005e2 <tuh_hid_report_received_cb+0x172>
-10000610:	79e9      	ldrb	r1, [r5, #7]
-10000612:	4299      	cmp	r1, r3
-10000614:	d0e5      	beq.n	100005e2 <tuh_hid_report_received_cb+0x172>
-10000616:	7820      	ldrb	r0, [r4, #0]
-10000618:	497d      	ldr	r1, [pc, #500]	@ (10000810 <tuh_hid_report_received_cb+0x3a0>)
-1000061a:	4684      	mov	ip, r0
-1000061c:	9109      	str	r1, [sp, #36]	@ 0x24
-1000061e:	2022      	movs	r0, #34	@ 0x22
-10000620:	4661      	mov	r1, ip
-10000622:	4008      	ands	r0, r1
-10000624:	1e41      	subs	r1, r0, #1
-10000626:	4188      	sbcs	r0, r1
-10000628:	9909      	ldr	r1, [sp, #36]	@ 0x24
-1000062a:	005b      	lsls	r3, r3, #1
-1000062c:	18c9      	adds	r1, r1, r3
-1000062e:	5c0b      	ldrb	r3, [r1, r0]
-10000630:	a90c      	add	r1, sp, #48	@ 0x30
-10000632:	4688      	mov	r8, r1
-10000634:	700b      	strb	r3, [r1, #0]
-10000636:	2b00      	cmp	r3, #0
-10000638:	d0d3      	beq.n	100005e2 <tuh_hid_report_received_cb+0x172>
-1000063a:	2b0a      	cmp	r3, #10
-1000063c:	d100      	bne.n	10000640 <tuh_hid_report_received_cb+0x1d0>
-1000063e:	e115      	b.n	1000086c <tuh_hid_report_received_cb+0x3fc>
-10000640:	2201      	movs	r2, #1
-10000642:	4641      	mov	r1, r8
-10000644:	2000      	movs	r0, #0
-10000646:	f006 faf3 	bl	10006c30 <tud_cdc_n_write>
-1000064a:	2000      	movs	r0, #0
-1000064c:	f006 fab2 	bl	10006bb4 <tud_cdc_n_write_flush>
-10000650:	e7c9      	b.n	100005e6 <tuh_hid_report_received_cb+0x176>
-10000652:	78a9      	ldrb	r1, [r5, #2]
-10000654:	4299      	cmp	r1, r3
-10000656:	d0c1      	beq.n	100005dc <tuh_hid_report_received_cb+0x16c>
-10000658:	78e9      	ldrb	r1, [r5, #3]
-1000065a:	4299      	cmp	r1, r3
-1000065c:	d0be      	beq.n	100005dc <tuh_hid_report_received_cb+0x16c>
-1000065e:	7929      	ldrb	r1, [r5, #4]
-10000660:	4299      	cmp	r1, r3
-10000662:	d0bb      	beq.n	100005dc <tuh_hid_report_received_cb+0x16c>
-10000664:	7969      	ldrb	r1, [r5, #5]
-10000666:	4299      	cmp	r1, r3
-10000668:	d0b8      	beq.n	100005dc <tuh_hid_report_received_cb+0x16c>
-1000066a:	79a9      	ldrb	r1, [r5, #6]
-1000066c:	4299      	cmp	r1, r3
-1000066e:	d0b5      	beq.n	100005dc <tuh_hid_report_received_cb+0x16c>
-10000670:	79e9      	ldrb	r1, [r5, #7]
-10000672:	4299      	cmp	r1, r3
-10000674:	d0b2      	beq.n	100005dc <tuh_hid_report_received_cb+0x16c>
-10000676:	7820      	ldrb	r0, [r4, #0]
-10000678:	4965      	ldr	r1, [pc, #404]	@ (10000810 <tuh_hid_report_received_cb+0x3a0>)
-1000067a:	4684      	mov	ip, r0
-1000067c:	9109      	str	r1, [sp, #36]	@ 0x24
-1000067e:	2022      	movs	r0, #34	@ 0x22
-10000680:	4661      	mov	r1, ip
-10000682:	4008      	ands	r0, r1
-10000684:	1e41      	subs	r1, r0, #1
-10000686:	4188      	sbcs	r0, r1
-10000688:	9909      	ldr	r1, [sp, #36]	@ 0x24
-1000068a:	005b      	lsls	r3, r3, #1
-1000068c:	18c9      	adds	r1, r1, r3
-1000068e:	5c0b      	ldrb	r3, [r1, r0]
-10000690:	a90c      	add	r1, sp, #48	@ 0x30
-10000692:	4688      	mov	r8, r1
-10000694:	700b      	strb	r3, [r1, #0]
-10000696:	2b00      	cmp	r3, #0
-10000698:	d0a0      	beq.n	100005dc <tuh_hid_report_received_cb+0x16c>
-1000069a:	2b0a      	cmp	r3, #10
-1000069c:	d100      	bne.n	100006a0 <tuh_hid_report_received_cb+0x230>
-1000069e:	e0eb      	b.n	10000878 <tuh_hid_report_received_cb+0x408>
-100006a0:	2201      	movs	r2, #1
-100006a2:	4641      	mov	r1, r8
-100006a4:	2000      	movs	r0, #0
-100006a6:	f006 fac3 	bl	10006c30 <tud_cdc_n_write>
-100006aa:	79e3      	ldrb	r3, [r4, #7]
-100006ac:	2b00      	cmp	r3, #0
-100006ae:	d0cc      	beq.n	1000064a <tuh_hid_report_received_cb+0x1da>
-100006b0:	78aa      	ldrb	r2, [r5, #2]
-100006b2:	429a      	cmp	r2, r3
-100006b4:	d0c9      	beq.n	1000064a <tuh_hid_report_received_cb+0x1da>
-100006b6:	78ea      	ldrb	r2, [r5, #3]
-100006b8:	429a      	cmp	r2, r3
-100006ba:	d0c6      	beq.n	1000064a <tuh_hid_report_received_cb+0x1da>
-100006bc:	792a      	ldrb	r2, [r5, #4]
-100006be:	429a      	cmp	r2, r3
-100006c0:	d0c3      	beq.n	1000064a <tuh_hid_report_received_cb+0x1da>
-100006c2:	2201      	movs	r2, #1
-100006c4:	e79e      	b.n	10000604 <tuh_hid_report_received_cb+0x194>
-100006c6:	78a9      	ldrb	r1, [r5, #2]
-100006c8:	4299      	cmp	r1, r3
-100006ca:	d084      	beq.n	100005d6 <tuh_hid_report_received_cb+0x166>
-100006cc:	78e9      	ldrb	r1, [r5, #3]
-100006ce:	4299      	cmp	r1, r3
-100006d0:	d081      	beq.n	100005d6 <tuh_hid_report_received_cb+0x166>
-100006d2:	7929      	ldrb	r1, [r5, #4]
-100006d4:	4299      	cmp	r1, r3
-100006d6:	d100      	bne.n	100006da <tuh_hid_report_received_cb+0x26a>
-100006d8:	e77d      	b.n	100005d6 <tuh_hid_report_received_cb+0x166>
-100006da:	7969      	ldrb	r1, [r5, #5]
-100006dc:	4299      	cmp	r1, r3
-100006de:	d100      	bne.n	100006e2 <tuh_hid_report_received_cb+0x272>
-100006e0:	e779      	b.n	100005d6 <tuh_hid_report_received_cb+0x166>
-100006e2:	79a9      	ldrb	r1, [r5, #6]
-100006e4:	4299      	cmp	r1, r3
-100006e6:	d100      	bne.n	100006ea <tuh_hid_report_received_cb+0x27a>
-100006e8:	e775      	b.n	100005d6 <tuh_hid_report_received_cb+0x166>
-100006ea:	79e9      	ldrb	r1, [r5, #7]
-100006ec:	4299      	cmp	r1, r3
-100006ee:	d100      	bne.n	100006f2 <tuh_hid_report_received_cb+0x282>
-100006f0:	e771      	b.n	100005d6 <tuh_hid_report_received_cb+0x166>
-100006f2:	7820      	ldrb	r0, [r4, #0]
-100006f4:	4946      	ldr	r1, [pc, #280]	@ (10000810 <tuh_hid_report_received_cb+0x3a0>)
-100006f6:	4684      	mov	ip, r0
-100006f8:	9109      	str	r1, [sp, #36]	@ 0x24
-100006fa:	2022      	movs	r0, #34	@ 0x22
-100006fc:	4661      	mov	r1, ip
-100006fe:	4008      	ands	r0, r1
-10000700:	1e41      	subs	r1, r0, #1
-10000702:	4188      	sbcs	r0, r1
-10000704:	9909      	ldr	r1, [sp, #36]	@ 0x24
-10000706:	005b      	lsls	r3, r3, #1
-10000708:	18c9      	adds	r1, r1, r3
-1000070a:	5c0b      	ldrb	r3, [r1, r0]
-1000070c:	a90c      	add	r1, sp, #48	@ 0x30
-1000070e:	4688      	mov	r8, r1
-10000710:	700b      	strb	r3, [r1, #0]
-10000712:	2b00      	cmp	r3, #0
-10000714:	d100      	bne.n	10000718 <tuh_hid_report_received_cb+0x2a8>
-10000716:	e75e      	b.n	100005d6 <tuh_hid_report_received_cb+0x166>
-10000718:	2b0a      	cmp	r3, #10
-1000071a:	d100      	bne.n	1000071e <tuh_hid_report_received_cb+0x2ae>
-1000071c:	e0b8      	b.n	10000890 <tuh_hid_report_received_cb+0x420>
-1000071e:	2201      	movs	r2, #1
-10000720:	4641      	mov	r1, r8
-10000722:	2000      	movs	r0, #0
-10000724:	f006 fa84 	bl	10006c30 <tud_cdc_n_write>
-10000728:	2201      	movs	r2, #1
-1000072a:	e754      	b.n	100005d6 <tuh_hid_report_received_cb+0x166>
-1000072c:	78a9      	ldrb	r1, [r5, #2]
-1000072e:	4299      	cmp	r1, r3
-10000730:	d100      	bne.n	10000734 <tuh_hid_report_received_cb+0x2c4>
-10000732:	e74d      	b.n	100005d0 <tuh_hid_report_received_cb+0x160>
-10000734:	78e9      	ldrb	r1, [r5, #3]
-10000736:	4299      	cmp	r1, r3
-10000738:	d100      	bne.n	1000073c <tuh_hid_report_received_cb+0x2cc>
-1000073a:	e749      	b.n	100005d0 <tuh_hid_report_received_cb+0x160>
-1000073c:	7929      	ldrb	r1, [r5, #4]
-1000073e:	4299      	cmp	r1, r3
-10000740:	d100      	bne.n	10000744 <tuh_hid_report_received_cb+0x2d4>
-10000742:	e745      	b.n	100005d0 <tuh_hid_report_received_cb+0x160>
-10000744:	7969      	ldrb	r1, [r5, #5]
-10000746:	4299      	cmp	r1, r3
-10000748:	d100      	bne.n	1000074c <tuh_hid_report_received_cb+0x2dc>
-1000074a:	e741      	b.n	100005d0 <tuh_hid_report_received_cb+0x160>
-1000074c:	79a9      	ldrb	r1, [r5, #6]
-1000074e:	4299      	cmp	r1, r3
-10000750:	d100      	bne.n	10000754 <tuh_hid_report_received_cb+0x2e4>
-10000752:	e73d      	b.n	100005d0 <tuh_hid_report_received_cb+0x160>
-10000754:	79e9      	ldrb	r1, [r5, #7]
-10000756:	4299      	cmp	r1, r3
-10000758:	d100      	bne.n	1000075c <tuh_hid_report_received_cb+0x2ec>
-1000075a:	e739      	b.n	100005d0 <tuh_hid_report_received_cb+0x160>
-1000075c:	7820      	ldrb	r0, [r4, #0]
-1000075e:	492c      	ldr	r1, [pc, #176]	@ (10000810 <tuh_hid_report_received_cb+0x3a0>)
-10000760:	4684      	mov	ip, r0
-10000762:	9109      	str	r1, [sp, #36]	@ 0x24
-10000764:	2022      	movs	r0, #34	@ 0x22
-10000766:	4661      	mov	r1, ip
-10000768:	4008      	ands	r0, r1
-1000076a:	1e41      	subs	r1, r0, #1
-1000076c:	4188      	sbcs	r0, r1
-1000076e:	9909      	ldr	r1, [sp, #36]	@ 0x24
-10000770:	005b      	lsls	r3, r3, #1
-10000772:	18c9      	adds	r1, r1, r3
-10000774:	5c0b      	ldrb	r3, [r1, r0]
-10000776:	a90c      	add	r1, sp, #48	@ 0x30
-10000778:	4688      	mov	r8, r1
-1000077a:	700b      	strb	r3, [r1, #0]
-1000077c:	2b00      	cmp	r3, #0
-1000077e:	d100      	bne.n	10000782 <tuh_hid_report_received_cb+0x312>
-10000780:	e726      	b.n	100005d0 <tuh_hid_report_received_cb+0x160>
-10000782:	2b0a      	cmp	r3, #10
-10000784:	d100      	bne.n	10000788 <tuh_hid_report_received_cb+0x318>
-10000786:	e08f      	b.n	100008a8 <tuh_hid_report_received_cb+0x438>
-10000788:	2201      	movs	r2, #1
-1000078a:	4641      	mov	r1, r8
-1000078c:	2000      	movs	r0, #0
-1000078e:	f006 fa4f 	bl	10006c30 <tud_cdc_n_write>
-10000792:	2201      	movs	r2, #1
-10000794:	e71c      	b.n	100005d0 <tuh_hid_report_received_cb+0x160>
-10000796:	78a9      	ldrb	r1, [r5, #2]
-10000798:	4299      	cmp	r1, r3
-1000079a:	d100      	bne.n	1000079e <tuh_hid_report_received_cb+0x32e>
-1000079c:	e714      	b.n	100005c8 <tuh_hid_report_received_cb+0x158>
-1000079e:	78e9      	ldrb	r1, [r5, #3]
-100007a0:	4299      	cmp	r1, r3
-100007a2:	d100      	bne.n	100007a6 <tuh_hid_report_received_cb+0x336>
-100007a4:	e710      	b.n	100005c8 <tuh_hid_report_received_cb+0x158>
-100007a6:	7929      	ldrb	r1, [r5, #4]
-100007a8:	4299      	cmp	r1, r3
-100007aa:	d100      	bne.n	100007ae <tuh_hid_report_received_cb+0x33e>
-100007ac:	e70c      	b.n	100005c8 <tuh_hid_report_received_cb+0x158>
-100007ae:	7969      	ldrb	r1, [r5, #5]
-100007b0:	4299      	cmp	r1, r3
-100007b2:	d100      	bne.n	100007b6 <tuh_hid_report_received_cb+0x346>
-100007b4:	e708      	b.n	100005c8 <tuh_hid_report_received_cb+0x158>
-100007b6:	79a9      	ldrb	r1, [r5, #6]
-100007b8:	4299      	cmp	r1, r3
-100007ba:	d100      	bne.n	100007be <tuh_hid_report_received_cb+0x34e>
-100007bc:	e704      	b.n	100005c8 <tuh_hid_report_received_cb+0x158>
-100007be:	79e9      	ldrb	r1, [r5, #7]
-100007c0:	4299      	cmp	r1, r3
-100007c2:	d100      	bne.n	100007c6 <tuh_hid_report_received_cb+0x356>
-100007c4:	e700      	b.n	100005c8 <tuh_hid_report_received_cb+0x158>
-100007c6:	7820      	ldrb	r0, [r4, #0]
-100007c8:	4911      	ldr	r1, [pc, #68]	@ (10000810 <tuh_hid_report_received_cb+0x3a0>)
-100007ca:	4684      	mov	ip, r0
-100007cc:	9109      	str	r1, [sp, #36]	@ 0x24
-100007ce:	2022      	movs	r0, #34	@ 0x22
-100007d0:	4661      	mov	r1, ip
-100007d2:	4008      	ands	r0, r1
-100007d4:	1e41      	subs	r1, r0, #1
-100007d6:	4188      	sbcs	r0, r1
-100007d8:	9909      	ldr	r1, [sp, #36]	@ 0x24
-100007da:	005b      	lsls	r3, r3, #1
-100007dc:	18c9      	adds	r1, r1, r3
-100007de:	5c0b      	ldrb	r3, [r1, r0]
-100007e0:	a90c      	add	r1, sp, #48	@ 0x30
-100007e2:	4688      	mov	r8, r1
-100007e4:	700b      	strb	r3, [r1, #0]
-100007e6:	2b00      	cmp	r3, #0
-100007e8:	d100      	bne.n	100007ec <tuh_hid_report_received_cb+0x37c>
-100007ea:	e6ed      	b.n	100005c8 <tuh_hid_report_received_cb+0x158>
-100007ec:	2b0a      	cmp	r3, #10
-100007ee:	d055      	beq.n	1000089c <tuh_hid_report_received_cb+0x42c>
-100007f0:	2201      	movs	r2, #1
-100007f2:	4641      	mov	r1, r8
-100007f4:	2000      	movs	r0, #0
-100007f6:	f006 fa1b 	bl	10006c30 <tud_cdc_n_write>
-100007fa:	2201      	movs	r2, #1
-100007fc:	e6e4      	b.n	100005c8 <tuh_hid_report_received_cb+0x158>
-100007fe:	46c0      	nop			@ (mov r8, r8)
+1000056c:	9303      	str	r3, [sp, #12]
+1000056e:	9200      	str	r2, [sp, #0]
+10000570:	464b      	mov	r3, r9
+10000572:	0032      	movs	r2, r6
+10000574:	9502      	str	r5, [sp, #8]
+10000576:	9401      	str	r4, [sp, #4]
+10000578:	a80c      	add	r0, sp, #48	@ 0x30
+1000057a:	f004 f961 	bl	10004840 <__wrap_sprintf>
+1000057e:	a90c      	add	r1, sp, #48	@ 0x30
+10000580:	0002      	movs	r2, r0
+10000582:	2000      	movs	r0, #0
+10000584:	f006 fb54 	bl	10006c30 <tud_cdc_n_write>
+10000588:	2000      	movs	r0, #0
+1000058a:	f006 fb13 	bl	10006bb4 <tud_cdc_n_write_flush>
+1000058e:	0039      	movs	r1, r7
+10000590:	0030      	movs	r0, r6
+10000592:	f009 f91d 	bl	100097d0 <tuh_hid_receive_report>
+10000596:	2800      	cmp	r0, #0
+10000598:	d000      	beq.n	1000059c <tuh_hid_report_received_cb+0x12c>
+1000059a:	e781      	b.n	100004a0 <tuh_hid_report_received_cb+0x30>
+1000059c:	221e      	movs	r2, #30
+1000059e:	499a      	ldr	r1, [pc, #616]	@ (10000808 <tuh_hid_report_received_cb+0x398>)
+100005a0:	f006 fb46 	bl	10006c30 <tud_cdc_n_write>
+100005a4:	e77c      	b.n	100004a0 <tuh_hid_report_received_cb+0x30>
+100005a6:	1ca3      	adds	r3, r4, #2
+100005a8:	2101      	movs	r1, #1
+100005aa:	2000      	movs	r0, #0
+100005ac:	7822      	ldrb	r2, [r4, #0]
+100005ae:	f006 fd29 	bl	10007004 <tud_hid_n_keyboard_report>
+100005b2:	78a3      	ldrb	r3, [r4, #2]
+100005b4:	2b00      	cmp	r3, #0
+100005b6:	d000      	beq.n	100005ba <tuh_hid_report_received_cb+0x14a>
+100005b8:	e12c      	b.n	10000814 <tuh_hid_report_received_cb+0x3a4>
+100005ba:	2200      	movs	r2, #0
+100005bc:	4d93      	ldr	r5, [pc, #588]	@ (1000080c <tuh_hid_report_received_cb+0x39c>)
+100005be:	78e3      	ldrb	r3, [r4, #3]
+100005c0:	2b00      	cmp	r3, #0
+100005c2:	d000      	beq.n	100005c6 <tuh_hid_report_received_cb+0x156>
+100005c4:	e0e6      	b.n	10000794 <tuh_hid_report_received_cb+0x324>
+100005c6:	7923      	ldrb	r3, [r4, #4]
+100005c8:	2b00      	cmp	r3, #0
+100005ca:	d000      	beq.n	100005ce <tuh_hid_report_received_cb+0x15e>
+100005cc:	e0ad      	b.n	1000072a <tuh_hid_report_received_cb+0x2ba>
+100005ce:	7963      	ldrb	r3, [r4, #5]
+100005d0:	2b00      	cmp	r3, #0
+100005d2:	d177      	bne.n	100006c4 <tuh_hid_report_received_cb+0x254>
+100005d4:	79a3      	ldrb	r3, [r4, #6]
+100005d6:	2b00      	cmp	r3, #0
+100005d8:	d13a      	bne.n	10000650 <tuh_hid_report_received_cb+0x1e0>
+100005da:	79e3      	ldrb	r3, [r4, #7]
+100005dc:	2b00      	cmp	r3, #0
+100005de:	d107      	bne.n	100005f0 <tuh_hid_report_received_cb+0x180>
+100005e0:	2a00      	cmp	r2, #0
+100005e2:	d131      	bne.n	10000648 <tuh_hid_report_received_cb+0x1d8>
+100005e4:	2208      	movs	r2, #8
+100005e6:	0021      	movs	r1, r4
+100005e8:	0028      	movs	r0, r5
+100005ea:	f002 fccf 	bl	10002f8c <__wrap___aeabi_memcpy>
+100005ee:	e750      	b.n	10000492 <tuh_hid_report_received_cb+0x22>
+100005f0:	78a9      	ldrb	r1, [r5, #2]
+100005f2:	4299      	cmp	r1, r3
+100005f4:	d0f4      	beq.n	100005e0 <tuh_hid_report_received_cb+0x170>
+100005f6:	78e9      	ldrb	r1, [r5, #3]
+100005f8:	4299      	cmp	r1, r3
+100005fa:	d0f1      	beq.n	100005e0 <tuh_hid_report_received_cb+0x170>
+100005fc:	7929      	ldrb	r1, [r5, #4]
+100005fe:	4299      	cmp	r1, r3
+10000600:	d0ee      	beq.n	100005e0 <tuh_hid_report_received_cb+0x170>
+10000602:	7969      	ldrb	r1, [r5, #5]
+10000604:	4299      	cmp	r1, r3
+10000606:	d0eb      	beq.n	100005e0 <tuh_hid_report_received_cb+0x170>
+10000608:	79a9      	ldrb	r1, [r5, #6]
+1000060a:	4299      	cmp	r1, r3
+1000060c:	d0e8      	beq.n	100005e0 <tuh_hid_report_received_cb+0x170>
+1000060e:	79e9      	ldrb	r1, [r5, #7]
+10000610:	4299      	cmp	r1, r3
+10000612:	d0e5      	beq.n	100005e0 <tuh_hid_report_received_cb+0x170>
+10000614:	7820      	ldrb	r0, [r4, #0]
+10000616:	497e      	ldr	r1, [pc, #504]	@ (10000810 <tuh_hid_report_received_cb+0x3a0>)
+10000618:	4684      	mov	ip, r0
+1000061a:	9109      	str	r1, [sp, #36]	@ 0x24
+1000061c:	2022      	movs	r0, #34	@ 0x22
+1000061e:	4661      	mov	r1, ip
+10000620:	4008      	ands	r0, r1
+10000622:	1e41      	subs	r1, r0, #1
+10000624:	4188      	sbcs	r0, r1
+10000626:	9909      	ldr	r1, [sp, #36]	@ 0x24
+10000628:	005b      	lsls	r3, r3, #1
+1000062a:	18c9      	adds	r1, r1, r3
+1000062c:	5c0b      	ldrb	r3, [r1, r0]
+1000062e:	a90c      	add	r1, sp, #48	@ 0x30
+10000630:	4688      	mov	r8, r1
+10000632:	700b      	strb	r3, [r1, #0]
+10000634:	2b00      	cmp	r3, #0
+10000636:	d0d3      	beq.n	100005e0 <tuh_hid_report_received_cb+0x170>
+10000638:	2b0a      	cmp	r3, #10
+1000063a:	d100      	bne.n	1000063e <tuh_hid_report_received_cb+0x1ce>
+1000063c:	e116      	b.n	1000086c <tuh_hid_report_received_cb+0x3fc>
+1000063e:	2201      	movs	r2, #1
+10000640:	4641      	mov	r1, r8
+10000642:	2000      	movs	r0, #0
+10000644:	f006 faf4 	bl	10006c30 <tud_cdc_n_write>
+10000648:	2000      	movs	r0, #0
+1000064a:	f006 fab3 	bl	10006bb4 <tud_cdc_n_write_flush>
+1000064e:	e7c9      	b.n	100005e4 <tuh_hid_report_received_cb+0x174>
+10000650:	78a9      	ldrb	r1, [r5, #2]
+10000652:	4299      	cmp	r1, r3
+10000654:	d0c1      	beq.n	100005da <tuh_hid_report_received_cb+0x16a>
+10000656:	78e9      	ldrb	r1, [r5, #3]
+10000658:	4299      	cmp	r1, r3
+1000065a:	d0be      	beq.n	100005da <tuh_hid_report_received_cb+0x16a>
+1000065c:	7929      	ldrb	r1, [r5, #4]
+1000065e:	4299      	cmp	r1, r3
+10000660:	d0bb      	beq.n	100005da <tuh_hid_report_received_cb+0x16a>
+10000662:	7969      	ldrb	r1, [r5, #5]
+10000664:	4299      	cmp	r1, r3
+10000666:	d0b8      	beq.n	100005da <tuh_hid_report_received_cb+0x16a>
+10000668:	79a9      	ldrb	r1, [r5, #6]
+1000066a:	4299      	cmp	r1, r3
+1000066c:	d0b5      	beq.n	100005da <tuh_hid_report_received_cb+0x16a>
+1000066e:	79e9      	ldrb	r1, [r5, #7]
+10000670:	4299      	cmp	r1, r3
+10000672:	d0b2      	beq.n	100005da <tuh_hid_report_received_cb+0x16a>
+10000674:	7820      	ldrb	r0, [r4, #0]
+10000676:	4966      	ldr	r1, [pc, #408]	@ (10000810 <tuh_hid_report_received_cb+0x3a0>)
+10000678:	4684      	mov	ip, r0
+1000067a:	9109      	str	r1, [sp, #36]	@ 0x24
+1000067c:	2022      	movs	r0, #34	@ 0x22
+1000067e:	4661      	mov	r1, ip
+10000680:	4008      	ands	r0, r1
+10000682:	1e41      	subs	r1, r0, #1
+10000684:	4188      	sbcs	r0, r1
+10000686:	9909      	ldr	r1, [sp, #36]	@ 0x24
+10000688:	005b      	lsls	r3, r3, #1
+1000068a:	18c9      	adds	r1, r1, r3
+1000068c:	5c0b      	ldrb	r3, [r1, r0]
+1000068e:	a90c      	add	r1, sp, #48	@ 0x30
+10000690:	4688      	mov	r8, r1
+10000692:	700b      	strb	r3, [r1, #0]
+10000694:	2b00      	cmp	r3, #0
+10000696:	d0a0      	beq.n	100005da <tuh_hid_report_received_cb+0x16a>
+10000698:	2b0a      	cmp	r3, #10
+1000069a:	d100      	bne.n	1000069e <tuh_hid_report_received_cb+0x22e>
+1000069c:	e0ec      	b.n	10000878 <tuh_hid_report_received_cb+0x408>
+1000069e:	2201      	movs	r2, #1
+100006a0:	4641      	mov	r1, r8
+100006a2:	2000      	movs	r0, #0
+100006a4:	f006 fac4 	bl	10006c30 <tud_cdc_n_write>
+100006a8:	79e3      	ldrb	r3, [r4, #7]
+100006aa:	2b00      	cmp	r3, #0
+100006ac:	d0cc      	beq.n	10000648 <tuh_hid_report_received_cb+0x1d8>
+100006ae:	78aa      	ldrb	r2, [r5, #2]
+100006b0:	429a      	cmp	r2, r3
+100006b2:	d0c9      	beq.n	10000648 <tuh_hid_report_received_cb+0x1d8>
+100006b4:	78ea      	ldrb	r2, [r5, #3]
+100006b6:	429a      	cmp	r2, r3
+100006b8:	d0c6      	beq.n	10000648 <tuh_hid_report_received_cb+0x1d8>
+100006ba:	792a      	ldrb	r2, [r5, #4]
+100006bc:	429a      	cmp	r2, r3
+100006be:	d0c3      	beq.n	10000648 <tuh_hid_report_received_cb+0x1d8>
+100006c0:	2201      	movs	r2, #1
+100006c2:	e79e      	b.n	10000602 <tuh_hid_report_received_cb+0x192>
+100006c4:	78a9      	ldrb	r1, [r5, #2]
+100006c6:	4299      	cmp	r1, r3
+100006c8:	d084      	beq.n	100005d4 <tuh_hid_report_received_cb+0x164>
+100006ca:	78e9      	ldrb	r1, [r5, #3]
+100006cc:	4299      	cmp	r1, r3
+100006ce:	d081      	beq.n	100005d4 <tuh_hid_report_received_cb+0x164>
+100006d0:	7929      	ldrb	r1, [r5, #4]
+100006d2:	4299      	cmp	r1, r3
+100006d4:	d100      	bne.n	100006d8 <tuh_hid_report_received_cb+0x268>
+100006d6:	e77d      	b.n	100005d4 <tuh_hid_report_received_cb+0x164>
+100006d8:	7969      	ldrb	r1, [r5, #5]
+100006da:	4299      	cmp	r1, r3
+100006dc:	d100      	bne.n	100006e0 <tuh_hid_report_received_cb+0x270>
+100006de:	e779      	b.n	100005d4 <tuh_hid_report_received_cb+0x164>
+100006e0:	79a9      	ldrb	r1, [r5, #6]
+100006e2:	4299      	cmp	r1, r3
+100006e4:	d100      	bne.n	100006e8 <tuh_hid_report_received_cb+0x278>
+100006e6:	e775      	b.n	100005d4 <tuh_hid_report_received_cb+0x164>
+100006e8:	79e9      	ldrb	r1, [r5, #7]
+100006ea:	4299      	cmp	r1, r3
+100006ec:	d100      	bne.n	100006f0 <tuh_hid_report_received_cb+0x280>
+100006ee:	e771      	b.n	100005d4 <tuh_hid_report_received_cb+0x164>
+100006f0:	7820      	ldrb	r0, [r4, #0]
+100006f2:	4947      	ldr	r1, [pc, #284]	@ (10000810 <tuh_hid_report_received_cb+0x3a0>)
+100006f4:	4684      	mov	ip, r0
+100006f6:	9109      	str	r1, [sp, #36]	@ 0x24
+100006f8:	2022      	movs	r0, #34	@ 0x22
+100006fa:	4661      	mov	r1, ip
+100006fc:	4008      	ands	r0, r1
+100006fe:	1e41      	subs	r1, r0, #1
+10000700:	4188      	sbcs	r0, r1
+10000702:	9909      	ldr	r1, [sp, #36]	@ 0x24
+10000704:	005b      	lsls	r3, r3, #1
+10000706:	18c9      	adds	r1, r1, r3
+10000708:	5c0b      	ldrb	r3, [r1, r0]
+1000070a:	a90c      	add	r1, sp, #48	@ 0x30
+1000070c:	4688      	mov	r8, r1
+1000070e:	700b      	strb	r3, [r1, #0]
+10000710:	2b00      	cmp	r3, #0
+10000712:	d100      	bne.n	10000716 <tuh_hid_report_received_cb+0x2a6>
+10000714:	e75e      	b.n	100005d4 <tuh_hid_report_received_cb+0x164>
+10000716:	2b0a      	cmp	r3, #10
+10000718:	d100      	bne.n	1000071c <tuh_hid_report_received_cb+0x2ac>
+1000071a:	e0b9      	b.n	10000890 <tuh_hid_report_received_cb+0x420>
+1000071c:	2201      	movs	r2, #1
+1000071e:	4641      	mov	r1, r8
+10000720:	2000      	movs	r0, #0
+10000722:	f006 fa85 	bl	10006c30 <tud_cdc_n_write>
+10000726:	2201      	movs	r2, #1
+10000728:	e754      	b.n	100005d4 <tuh_hid_report_received_cb+0x164>
+1000072a:	78a9      	ldrb	r1, [r5, #2]
+1000072c:	4299      	cmp	r1, r3
+1000072e:	d100      	bne.n	10000732 <tuh_hid_report_received_cb+0x2c2>
+10000730:	e74d      	b.n	100005ce <tuh_hid_report_received_cb+0x15e>
+10000732:	78e9      	ldrb	r1, [r5, #3]
+10000734:	4299      	cmp	r1, r3
+10000736:	d100      	bne.n	1000073a <tuh_hid_report_received_cb+0x2ca>
+10000738:	e749      	b.n	100005ce <tuh_hid_report_received_cb+0x15e>
+1000073a:	7929      	ldrb	r1, [r5, #4]
+1000073c:	4299      	cmp	r1, r3
+1000073e:	d100      	bne.n	10000742 <tuh_hid_report_received_cb+0x2d2>
+10000740:	e745      	b.n	100005ce <tuh_hid_report_received_cb+0x15e>
+10000742:	7969      	ldrb	r1, [r5, #5]
+10000744:	4299      	cmp	r1, r3
+10000746:	d100      	bne.n	1000074a <tuh_hid_report_received_cb+0x2da>
+10000748:	e741      	b.n	100005ce <tuh_hid_report_received_cb+0x15e>
+1000074a:	79a9      	ldrb	r1, [r5, #6]
+1000074c:	4299      	cmp	r1, r3
+1000074e:	d100      	bne.n	10000752 <tuh_hid_report_received_cb+0x2e2>
+10000750:	e73d      	b.n	100005ce <tuh_hid_report_received_cb+0x15e>
+10000752:	79e9      	ldrb	r1, [r5, #7]
+10000754:	4299      	cmp	r1, r3
+10000756:	d100      	bne.n	1000075a <tuh_hid_report_received_cb+0x2ea>
+10000758:	e739      	b.n	100005ce <tuh_hid_report_received_cb+0x15e>
+1000075a:	7820      	ldrb	r0, [r4, #0]
+1000075c:	492c      	ldr	r1, [pc, #176]	@ (10000810 <tuh_hid_report_received_cb+0x3a0>)
+1000075e:	4684      	mov	ip, r0
+10000760:	9109      	str	r1, [sp, #36]	@ 0x24
+10000762:	2022      	movs	r0, #34	@ 0x22
+10000764:	4661      	mov	r1, ip
+10000766:	4008      	ands	r0, r1
+10000768:	1e41      	subs	r1, r0, #1
+1000076a:	4188      	sbcs	r0, r1
+1000076c:	9909      	ldr	r1, [sp, #36]	@ 0x24
+1000076e:	005b      	lsls	r3, r3, #1
+10000770:	18c9      	adds	r1, r1, r3
+10000772:	5c0b      	ldrb	r3, [r1, r0]
+10000774:	a90c      	add	r1, sp, #48	@ 0x30
+10000776:	4688      	mov	r8, r1
+10000778:	700b      	strb	r3, [r1, #0]
+1000077a:	2b00      	cmp	r3, #0
+1000077c:	d100      	bne.n	10000780 <tuh_hid_report_received_cb+0x310>
+1000077e:	e726      	b.n	100005ce <tuh_hid_report_received_cb+0x15e>
+10000780:	2b0a      	cmp	r3, #10
+10000782:	d100      	bne.n	10000786 <tuh_hid_report_received_cb+0x316>
+10000784:	e090      	b.n	100008a8 <tuh_hid_report_received_cb+0x438>
+10000786:	2201      	movs	r2, #1
+10000788:	4641      	mov	r1, r8
+1000078a:	2000      	movs	r0, #0
+1000078c:	f006 fa50 	bl	10006c30 <tud_cdc_n_write>
+10000790:	2201      	movs	r2, #1
+10000792:	e71c      	b.n	100005ce <tuh_hid_report_received_cb+0x15e>
+10000794:	78a9      	ldrb	r1, [r5, #2]
+10000796:	4299      	cmp	r1, r3
+10000798:	d100      	bne.n	1000079c <tuh_hid_report_received_cb+0x32c>
+1000079a:	e714      	b.n	100005c6 <tuh_hid_report_received_cb+0x156>
+1000079c:	78e9      	ldrb	r1, [r5, #3]
+1000079e:	4299      	cmp	r1, r3
+100007a0:	d100      	bne.n	100007a4 <tuh_hid_report_received_cb+0x334>
+100007a2:	e710      	b.n	100005c6 <tuh_hid_report_received_cb+0x156>
+100007a4:	7929      	ldrb	r1, [r5, #4]
+100007a6:	4299      	cmp	r1, r3
+100007a8:	d100      	bne.n	100007ac <tuh_hid_report_received_cb+0x33c>
+100007aa:	e70c      	b.n	100005c6 <tuh_hid_report_received_cb+0x156>
+100007ac:	7969      	ldrb	r1, [r5, #5]
+100007ae:	4299      	cmp	r1, r3
+100007b0:	d100      	bne.n	100007b4 <tuh_hid_report_received_cb+0x344>
+100007b2:	e708      	b.n	100005c6 <tuh_hid_report_received_cb+0x156>
+100007b4:	79a9      	ldrb	r1, [r5, #6]
+100007b6:	4299      	cmp	r1, r3
+100007b8:	d100      	bne.n	100007bc <tuh_hid_report_received_cb+0x34c>
+100007ba:	e704      	b.n	100005c6 <tuh_hid_report_received_cb+0x156>
+100007bc:	79e9      	ldrb	r1, [r5, #7]
+100007be:	4299      	cmp	r1, r3
+100007c0:	d100      	bne.n	100007c4 <tuh_hid_report_received_cb+0x354>
+100007c2:	e700      	b.n	100005c6 <tuh_hid_report_received_cb+0x156>
+100007c4:	7820      	ldrb	r0, [r4, #0]
+100007c6:	4912      	ldr	r1, [pc, #72]	@ (10000810 <tuh_hid_report_received_cb+0x3a0>)
+100007c8:	4684      	mov	ip, r0
+100007ca:	9109      	str	r1, [sp, #36]	@ 0x24
+100007cc:	2022      	movs	r0, #34	@ 0x22
+100007ce:	4661      	mov	r1, ip
+100007d0:	4008      	ands	r0, r1
+100007d2:	1e41      	subs	r1, r0, #1
+100007d4:	4188      	sbcs	r0, r1
+100007d6:	9909      	ldr	r1, [sp, #36]	@ 0x24
+100007d8:	005b      	lsls	r3, r3, #1
+100007da:	18c9      	adds	r1, r1, r3
+100007dc:	5c0b      	ldrb	r3, [r1, r0]
+100007de:	a90c      	add	r1, sp, #48	@ 0x30
+100007e0:	4688      	mov	r8, r1
+100007e2:	700b      	strb	r3, [r1, #0]
+100007e4:	2b00      	cmp	r3, #0
+100007e6:	d100      	bne.n	100007ea <tuh_hid_report_received_cb+0x37a>
+100007e8:	e6ed      	b.n	100005c6 <tuh_hid_report_received_cb+0x156>
+100007ea:	2b0a      	cmp	r3, #10
+100007ec:	d056      	beq.n	1000089c <tuh_hid_report_received_cb+0x42c>
+100007ee:	2201      	movs	r2, #1
+100007f0:	4641      	mov	r1, r8
+100007f2:	2000      	movs	r0, #0
+100007f4:	f006 fa1c 	bl	10006c30 <tud_cdc_n_write>
+100007f8:	2201      	movs	r2, #1
+100007fa:	e6e4      	b.n	100005c6 <tuh_hid_report_received_cb+0x156>
+100007fc:	000055aa 	.word	0x000055aa
 10000800:	40034000 	.word	0x40034000
 10000804:	1000a938 	.word	0x1000a938
 10000808:	1000a8f0 	.word	0x1000a8f0
@@ -991,19 +990,19 @@ Disassembly of section .text:
 1000085e:	2000      	movs	r0, #0
 10000860:	f006 f9e6 	bl	10006c30 <tud_cdc_n_write>
 10000864:	2201      	movs	r2, #1
-10000866:	e6ab      	b.n	100005c0 <tuh_hid_report_received_cb+0x150>
+10000866:	e6aa      	b.n	100005be <tuh_hid_report_received_cb+0x14e>
 10000868:	2200      	movs	r2, #0
-1000086a:	e6a9      	b.n	100005c0 <tuh_hid_report_received_cb+0x150>
+1000086a:	e6a8      	b.n	100005be <tuh_hid_report_received_cb+0x14e>
 1000086c:	2201      	movs	r2, #1
 1000086e:	4913      	ldr	r1, [pc, #76]	@ (100008bc <tuh_hid_report_received_cb+0x44c>)
 10000870:	2000      	movs	r0, #0
 10000872:	f006 f9dd 	bl	10006c30 <tud_cdc_n_write>
-10000876:	e6e3      	b.n	10000640 <tuh_hid_report_received_cb+0x1d0>
+10000876:	e6e2      	b.n	1000063e <tuh_hid_report_received_cb+0x1ce>
 10000878:	2201      	movs	r2, #1
 1000087a:	4910      	ldr	r1, [pc, #64]	@ (100008bc <tuh_hid_report_received_cb+0x44c>)
 1000087c:	2000      	movs	r0, #0
 1000087e:	f006 f9d7 	bl	10006c30 <tud_cdc_n_write>
-10000882:	e70d      	b.n	100006a0 <tuh_hid_report_received_cb+0x230>
+10000882:	e70c      	b.n	1000069e <tuh_hid_report_received_cb+0x22e>
 10000884:	2201      	movs	r2, #1
 10000886:	490d      	ldr	r1, [pc, #52]	@ (100008bc <tuh_hid_report_received_cb+0x44c>)
 10000888:	2000      	movs	r0, #0
@@ -1013,17 +1012,17 @@ Disassembly of section .text:
 10000892:	490a      	ldr	r1, [pc, #40]	@ (100008bc <tuh_hid_report_received_cb+0x44c>)
 10000894:	2000      	movs	r0, #0
 10000896:	f006 f9cb 	bl	10006c30 <tud_cdc_n_write>
-1000089a:	e740      	b.n	1000071e <tuh_hid_report_received_cb+0x2ae>
+1000089a:	e73f      	b.n	1000071c <tuh_hid_report_received_cb+0x2ac>
 1000089c:	2201      	movs	r2, #1
 1000089e:	4907      	ldr	r1, [pc, #28]	@ (100008bc <tuh_hid_report_received_cb+0x44c>)
 100008a0:	2000      	movs	r0, #0
 100008a2:	f006 f9c5 	bl	10006c30 <tud_cdc_n_write>
-100008a6:	e7a3      	b.n	100007f0 <tuh_hid_report_received_cb+0x380>
+100008a6:	e7a2      	b.n	100007ee <tuh_hid_report_received_cb+0x37e>
 100008a8:	2201      	movs	r2, #1
 100008aa:	4904      	ldr	r1, [pc, #16]	@ (100008bc <tuh_hid_report_received_cb+0x44c>)
 100008ac:	2000      	movs	r0, #0
 100008ae:	f006 f9bf 	bl	10006c30 <tud_cdc_n_write>
-100008b2:	e769      	b.n	10000788 <tuh_hid_report_received_cb+0x318>
+100008b2:	e768      	b.n	10000786 <tuh_hid_report_received_cb+0x316>
 100008b4:	20007198 	.word	0x20007198
 100008b8:	1000ab78 	.word	0x1000ab78
 100008bc:	1000a934 	.word	0x1000a934

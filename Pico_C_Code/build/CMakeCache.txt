@@ -130,7 +130,7 @@ CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=
 CMAKE_FIND_PACKAGE_REDIRECTS_DIR:STATIC=C:/Users/ASUS/PycharmProjects/AntiRecoil_RP2040/Pico_C_Code/build/CMakeFiles/pkgRedirects
 
 //Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=C:/Program Files (x86)/USB_DEVICE_AND_KEYBOARD
+CMAKE_INSTALL_PREFIX:PATH=C:/Program Files (x86)/USB_HID_Sniffer
 
 //Path to a program.
 CMAKE_LINKER:FILEPATH=C:/Users/ASUS/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-ld.exe
@@ -326,15 +326,6 @@ PICO_STDIO_USB:BOOL=OFF
 
 //No help, variable specified on the command line.
 Python3_EXECUTABLE:UNINITIALIZED=c:/Users/ASUS/AppData/Local/Programs/Python/Python312/python.exe
-
-//Value Computed by CMake
-USB_DEVICE_AND_KEYBOARD_BINARY_DIR:STATIC=C:/Users/ASUS/PycharmProjects/AntiRecoil_RP2040/Pico_C_Code/build
-
-//Value Computed by CMake
-USB_DEVICE_AND_KEYBOARD_IS_TOP_LEVEL:STATIC=ON
-
-//Value Computed by CMake
-USB_DEVICE_AND_KEYBOARD_SOURCE_DIR:STATIC=C:/Users/ASUS/PycharmProjects/AntiRecoil_RP2040/Pico_C_Code
 
 //Value Computed by CMake
 USB_HID_Sniffer_BINARY_DIR:STATIC=C:/Users/ASUS/PycharmProjects/AntiRecoil_RP2040/Pico_C_Code/build
