@@ -106,7 +106,7 @@ def main():
                     pat.close()
                     
                 if DFWB.rose:
-                    yPos = yPos+0.1
+                    yPos = round(yPos + 0.1, 1)
                     print(yPos)
                     with open('Patterns/DefaultSen.txt', 'w') as pat:
                         pat.write(str(yPos))
@@ -115,7 +115,7 @@ def main():
                     
                 if DBWB.rose:
                     if yPos > 0.1:
-                        yPos = yPos-0.1
+                        yPos = round(yPos - 0.1, 1)
                     print(yPos)
                     with open('Patterns/DefaultSen.txt', 'w') as pat:
                         pat.write(str(yPos))
