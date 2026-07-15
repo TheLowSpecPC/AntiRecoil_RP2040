@@ -5,12 +5,7 @@ import serial.tools.list_ports
 import json
 import os
 import time
-
-# Ensure keycodes.py is in the same directory if you are using it in byte_conversion
-try:
-    import keycodes
-except ImportError:
-    pass
+import keycodes
 
 CONFIG_FILE = "antirecoil_config.json"
 APP_TITLE = "AntiRecoil_Version2 Control Panel"
@@ -445,6 +440,7 @@ class ControllerApp(tk.Tk):
                 if message[0] == "Start_Auto_Clicker":
                     command.append(b'\x11')
                     command.append(bytes([self.config["auto_clicker"]["CPS"]]))
+                    command += self.buttonByteConversion(self.config["auto_clicker"]["Fire_Button"]) + self.buttonByteConversion(self.config["auto_clicker"]["Enable_Button"])
 
                 elif message[0] == "Stop_Auto_Clicker":
                     command.append(b'\x10')
@@ -501,13 +497,33 @@ class ControllerApp(tk.Tk):
                     delay = bytes([int(patterns[i][0])])
                     continue
                 final_patterns.append(bytes([round(float(patterns[i][0])/yaw) & 0xff]))
-                final_patterns.append(bytes([round((float(patterns[i][1]))/yaw) & 0xff]))
+                final_patterns.append(bytes([round(float(patterns[i][1])/yaw) & 0xff]))
 
             return final_patterns, delay
         
         except Exception as e:
             messagebox.showerror("Read Error", f"Failed to read pattern file.\n{e}")
             return None, None
+        
+    def buttonByteConversion(self, key):
+        final_bytes = []
+
+        if key in keycodes.asciiToKeycode:
+            final_bytes.append(keycodes.asciiToKeycode[key])
+            final_bytes.append(b'\x01')
+
+        elif key in keycodes.modifier:
+            final_bytes.append(keycodes.modifier[key])
+            final_bytes.append(b'\x02')
+
+        elif key in keycodes.mouse:
+            final_bytes.append(keycodes.mouse[key])
+            final_bytes.append(b'\x03')
+
+        else:
+            final_bytes += [b'\x00', b'\x00']
+
+        return final_bytes
 
 
 if __name__ == "__main__":

@@ -41,6 +41,7 @@
 #include "pio_usb.h"
 #include "tusb.h"
 #include "usb_descriptors.h"
+#include "AntiRecoil.h"
 
 // Define UART parameters
 #define UART_ID uart0
@@ -57,6 +58,10 @@
 
 
 static uint8_t const keycode2ascii[128][2] =  { HID_KEYCODE_TO_ASCII };
+
+#define BUFFER_SIZE 264
+static uint8_t rx_buffer[BUFFER_SIZE];
+static uint32_t rx_index = 0;
 
 
 /*------------- MAIN -------------*/
@@ -103,6 +108,40 @@ void core1_main() {
 
   while (true) {
     tuh_task(); // tinyusb host task
+    modified_task();
+
+    if (tud_cdc_available()) {
+      // Read new data into the buffer starting at our current index
+      uint32_t count = tud_cdc_read(&rx_buffer[rx_index], sizeof(rx_buffer) - rx_index);
+      rx_index += count;
+
+      while (rx_index >= BUFFER_SIZE) {
+        // Check for your end-of-data signature at the expected positions
+        if (rx_buffer[0] == 0xFF && rx_buffer[1] == 0xAA) {
+          gpio_put(25, 1); // Turn on LED on success
+
+          // Shift elements left by 2 positions
+          memmove(&rx_buffer[0], &rx_buffer[2], (BUFFER_SIZE - 2) * sizeof(uint8_t));
+          memset(&rx_buffer[BUFFER_SIZE - 2], 0, 2 * sizeof(uint8_t)); // Clear the last 2 bytes
+
+          // Save to memory
+          saveConfig(rx_buffer);
+
+          sleep_ms(100); // Give time for the message to be sent
+        } 
+        else {
+          // In a real-world scenario, you might search for 0xFF 0xAA and shift to resync, 
+          // but clearing the buffer is the easiest fallback to reset state.
+          rx_index = 0; 
+          break; 
+        }
+
+        rx_index -= BUFFER_SIZE;
+        if (rx_index > 0) {
+          memmove(rx_buffer, &rx_buffer[BUFFER_SIZE], rx_index);
+        }
+      }
+    }
   }
 }
 
@@ -214,7 +253,7 @@ static void process_mouse_report(uint8_t dev_addr, hid_mouse_report_t const * re
   uint8_t payload[6] = {0xAA, 0x55, report->buttons, report->x, report->y, report->wheel};
 
   // Send the 4 bytes, blocking until they are all written to the UART FIFO
-  uart_write_blocking(UART_ID, payload, 6);
+  //uart_write_blocking(UART_ID, payload, 6);
 
   //------------- button state  -------------//
   //uint8_t button_changed_mask = report->buttons ^ prev_report.buttons;
