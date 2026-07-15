@@ -162,7 +162,7 @@ Discarded input sections
  .ARM.extab     0x00000000        0x0 C:/Users/ASUS/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
  .ARM.exidx     0x00000000       0x10 C:/Users/ASUS/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
  .debug_line_str
-                0x00000000       0xd2 C:/Users/ASUS/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+                0x00000000       0xd6 C:/Users/ASUS/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
  .ARM.attributes
                 0x00000000       0x1b C:/Users/ASUS/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
  .text          0x00000000        0x0 CMakeFiles/USB_HID_Sniffer.dir/main_device.c.obj
@@ -2387,7 +2387,7 @@ Discarded input sections
  .data          0x00000000        0x0 C:/Users/ASUS/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libg.a(libc_a-strcmp.o)
  .bss           0x00000000        0x0 C:/Users/ASUS/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libg.a(libc_a-strcmp.o)
  .debug_line_str
-                0x00000000       0xdf C:/Users/ASUS/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libg.a(libc_a-strcmp.o)
+                0x00000000       0xe3 C:/Users/ASUS/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libg.a(libc_a-strcmp.o)
  .debug_frame   0x00000000       0x20 C:/Users/ASUS/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libg.a(libc_a-strcmp.o)
  .ARM.attributes
                 0x00000000       0x1b C:/Users/ASUS/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libg.a(libc_a-strcmp.o)
@@ -5533,23 +5533,23 @@ LOAD linker stubs
  .debug_frame   0x00004c20       0x2c C:/Users/ASUS/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libg.a(libc_a-reent.o)
 
 .debug_line_str
-                0x00000000      0x351
+                0x00000000      0x355
  .debug_line_str
-                0x00000000      0x351 CMakeFiles/USB_HID_Sniffer.dir/C_/Users/ASUS/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.obj
+                0x00000000      0x355 CMakeFiles/USB_HID_Sniffer.dir/C_/Users/ASUS/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.obj
                                  0x90 (size before relaxing)
  .debug_line_str
-                0x00000351       0x93 CMakeFiles/USB_HID_Sniffer.dir/C_/Users/ASUS/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_hardware.S.obj
+                0x00000355       0x93 CMakeFiles/USB_HID_Sniffer.dir/C_/Users/ASUS/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_hardware.S.obj
  .debug_line_str
-                0x00000351       0x95 CMakeFiles/USB_HID_Sniffer.dir/C_/Users/ASUS/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_rp2040.S.obj
+                0x00000355       0x95 CMakeFiles/USB_HID_Sniffer.dir/C_/Users/ASUS/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_rp2040.S.obj
  .debug_line_str
-                0x00000351       0x9b CMakeFiles/USB_HID_Sniffer.dir/C_/Users/ASUS/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_v1_rom_shim_rp2040.S.obj
+                0x00000355       0x9b CMakeFiles/USB_HID_Sniffer.dir/C_/Users/ASUS/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_v1_rom_shim_rp2040.S.obj
  .debug_line_str
-                0x00000351       0x99 CMakeFiles/USB_HID_Sniffer.dir/C_/Users/ASUS/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_int64_ops/pico_int64_ops_aeabi.S.obj
+                0x00000355       0x99 CMakeFiles/USB_HID_Sniffer.dir/C_/Users/ASUS/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_int64_ops/pico_int64_ops_aeabi.S.obj
  .debug_line_str
-                0x00000351       0x93 CMakeFiles/USB_HID_Sniffer.dir/C_/Users/ASUS/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_aeabi_rp2040.S.obj
+                0x00000355       0x93 CMakeFiles/USB_HID_Sniffer.dir/C_/Users/ASUS/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_aeabi_rp2040.S.obj
  .debug_line_str
-                0x00000351       0x90 CMakeFiles/USB_HID_Sniffer.dir/C_/Users/ASUS/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_mem_ops/mem_ops_aeabi.S.obj
+                0x00000355       0x90 CMakeFiles/USB_HID_Sniffer.dir/C_/Users/ASUS/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_mem_ops/mem_ops_aeabi.S.obj
  .debug_line_str
-                0x00000351       0x84 CMakeFiles/USB_HID_Sniffer.dir/C_/Users/ASUS/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_crt0/crt0.S.obj
+                0x00000355       0x84 CMakeFiles/USB_HID_Sniffer.dir/C_/Users/ASUS/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_crt0/crt0.S.obj
  .debug_line_str
-                0x00000351       0xc9 C:/Users/ASUS/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
+                0x00000355       0xcd C:/Users/ASUS/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
