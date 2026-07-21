@@ -456,12 +456,12 @@ class ControllerApp(tk.Tk):
                 elif message[0] == "Stop_Anti_Recoil" or message[0] == "Stop_Default_Recoil":
                     command.append(b'\x20')
 
+                command = b''.join(command)
                 print(f"Sending command: {command}")
-                """command = b''.join(command)
 
                 self.serial_conn.reset_input_buffer()
                 self.serial_conn.write(command)
-                self.serial_conn.flush()"""
+                self.serial_conn.flush()
 
             except Exception as e:
                 self.status_var.set("Status: Send Error", f"Failed to send command.\n{e}")

@@ -61,7 +61,7 @@ static uint8_t const keycode2ascii[128][2] =  { HID_KEYCODE_TO_ASCII };
 
 #define BUFFER_SIZE 264
 static uint8_t rx_buffer[BUFFER_SIZE];
-static uint32_t rx_index = 0;
+uint8_t send_buffer[BUFFER_SIZE];
 
 
 /*------------- MAIN -------------*/
@@ -106,41 +106,30 @@ void core1_main() {
   // Add the second port
   pio_usb_host_add_port(pin_dp_2, PIO_USB_PINOUT_DPDM);
 
+  // Initialize the default LED pin (GP25) as an output
+  gpio_init(25);
+  gpio_set_dir(25, GPIO_OUT);
+
   while (true) {
     tuh_task(); // tinyusb host task
     modified_task();
 
     if (tud_cdc_available()) {
       // Read new data into the buffer starting at our current index
-      uint32_t count = tud_cdc_read(&rx_buffer[rx_index], sizeof(rx_buffer) - rx_index);
-      rx_index += count;
+      uint32_t count = tud_cdc_read(rx_buffer, BUFFER_SIZE);
 
-      while (rx_index >= BUFFER_SIZE) {
-        // Check for your end-of-data signature at the expected positions
-        if (rx_buffer[0] == 0xFF && rx_buffer[1] == 0xAA) {
-          gpio_put(25, 1); // Turn on LED on success
+      if (rx_buffer[0] == 0xFF && rx_buffer[1] == 0xAA) {
+        gpio_put(25, 1); // Turn on LED on success
 
-          // Shift elements left by 2 positions
-          memmove(&rx_buffer[0], &rx_buffer[2], (BUFFER_SIZE - 2) * sizeof(uint8_t));
-          memset(&rx_buffer[BUFFER_SIZE - 2], 0, 2 * sizeof(uint8_t)); // Clear the last 2 bytes
-
-          // Save to memory
-          saveConfig(rx_buffer);
-
-          sleep_ms(100); // Give time for the message to be sent
-        } 
-        else {
-          // In a real-world scenario, you might search for 0xFF 0xAA and shift to resync, 
-          // but clearing the buffer is the easiest fallback to reset state.
-          rx_index = 0; 
-          break; 
+        for(int i = 2; i < count; i++) {
+          send_buffer[i - 2] = rx_buffer[i];
         }
 
-        rx_index -= BUFFER_SIZE;
-        if (rx_index > 0) {
-          memmove(rx_buffer, &rx_buffer[BUFFER_SIZE], rx_index);
-        }
-      }
+        // Save to memory
+        saveConfig(send_buffer);
+
+        sleep_ms(100);
+      } 
     }
   }
 }
@@ -290,11 +279,13 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance, uint8_t cons
   switch(itf_protocol)
   {
     case HID_ITF_PROTOCOL_KEYBOARD:
-      process_kbd_report(dev_addr, (hid_keyboard_report_t const*) report );
+      //process_kbd_report(dev_addr, (hid_keyboard_report_t const*) report );
+      kbd_report((hid_keyboard_report_t const*) report );
     break;
 
     case HID_ITF_PROTOCOL_MOUSE:
-      process_mouse_report(dev_addr, (hid_mouse_report_t const*) report );
+      //process_mouse_report(dev_addr, (hid_mouse_report_t const*) report );
+      mouse_report((hid_mouse_report_t const*) report );
     break;
 
     default: break;
