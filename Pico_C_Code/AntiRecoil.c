@@ -53,7 +53,15 @@ bool pushButton(uint8_t now) {
 
 // convert hid keyboard report to hid gamepad report
 void kbd_report(hid_keyboard_report_t const *report) {
-    keyboard = *report;
+    for(int i = 0; i < 6; i++){
+        if(Fire_Button[1] == 1 && AutoClickerEnable && fire && enable){continue;} // Skip rapid fire button if enabled
+        else{keyboard.keycode[i] = report->keycode[i];}
+    }
+
+    for(int i = 0; i < 8; i++){
+        if(Fire_Button[1] == 2 && AutoClickerEnable && fire && enable){continue;} // Skip rapid fire button if enabled
+        else{keyboard.modifier = report->modifier & TU_BIT(i) ? keyboard.modifier | TU_BIT(i) : keyboard.modifier & ~TU_BIT(i);}
+    }
 
     if(Fire_Button[1] == 1){fire = check(Fire_Button[0], report->keycode);}
     else if(Fire_Button[1] == 2){fire  = report->modifier & Fire_Button[0];}
@@ -69,16 +77,17 @@ void mouse_report(hid_mouse_report_t const *report) {
     mouse.x = report->x; mouse.y = report->y; mouse.wheel = report->wheel;
 
     for(int i = 0; i < 5; i++){
-        if(Fire_Button[1] == 3 && fire && AutoClickerEnable){continue;} // Skip rapid fire button if enabled
-        else{
-            mouse.buttons = report->buttons & TU_BIT(i) ? mouse.buttons | TU_BIT(i) : mouse.buttons & ~TU_BIT(i);
-        }
+        if(Fire_Button[1] == 3 && AutoClickerEnable && fire && enable){continue;} // Skip rapid fire button if enabled
+        else{mouse.buttons = report->buttons & TU_BIT(i) ? mouse.buttons | TU_BIT(i) : mouse.buttons & ~TU_BIT(i);}
     }
 
     if(Fire_Button[1] == 3){fire = report->buttons & Fire_Button[0];}
     if(Enable_Button[1] == 3){enable = pushButton(report->buttons & Enable_Button[0]);}
 
     tud_hid_mouse_report(REPORT_ID_MOUSE, mouse.buttons, mouse.x, mouse.y, mouse.wheel, 0);
+
+    tud_cdc_write(keyboard.keycode, 6);
+    tud_cdc_write_flush();
 }
 
 void modified_task(){
@@ -90,15 +99,38 @@ void modified_task(){
             if((now - clickerTime) >= 1000000/cps){
                 clickerTime = now;
 
-                if(Fire_Button[1] == 1){}
-                else if(Fire_Button[1] == 2){keyboard.modifier = keyboard.modifier ^ Fire_Button[0];}
-                else if(Fire_Button[1] == 3){mouse.buttons = mouse.buttons ^ Fire_Button[0];}
-
-                tud_hid_mouse_report(REPORT_ID_MOUSE, mouse.buttons, 0, 0, 0, 0);
+                if(Fire_Button[1] == 1){
+                    for(int i = 0; i < 6; i++){
+                        if(keyboard.keycode[i] == Fire_Button[0]){
+                            keyboard.keycode[i] = 0;
+                            break;
+                        }
+                        else if(keyboard.keycode[i] == 0){
+                            keyboard.keycode[i] = Fire_Button[0];
+                            break;
+                        }
+                    }
+                    tud_hid_keyboard_report(REPORT_ID_KEYBOARD, keyboard.modifier, (uint8_t*) keyboard.keycode);
+                }
+                else if(Fire_Button[1] == 2){
+                    keyboard.modifier = keyboard.modifier ^ Fire_Button[0];
+                    tud_hid_keyboard_report(REPORT_ID_KEYBOARD, keyboard.modifier, (uint8_t*) keyboard.keycode);
+                }
+                else if(Fire_Button[1] == 3){
+                    mouse.buttons = mouse.buttons ^ Fire_Button[0];
+                    tud_hid_mouse_report(REPORT_ID_MOUSE, mouse.buttons, 0, 0, 0, 0);
+                }
             }
         }
         else{
-            if(Fire_Button[1] == 1){}
+            if(Fire_Button[1] == 1){
+                for(int i = 0; i < 6; i++){
+                    if(keyboard.keycode[i] == Fire_Button[0]){
+                        keyboard.keycode[i] = 0;
+                        break;
+                    }
+                }
+            }
             else if(Fire_Button[1] == 2){keyboard.modifier = keyboard.modifier & ~Fire_Button[0];}
             else if(Fire_Button[1] == 3){mouse.buttons = mouse.buttons & ~Fire_Button[0];}
         }
