@@ -8,18 +8,26 @@ import time
 import keycodes
 
 CONFIG_FILE = "antirecoil_config.json"
-APP_TITLE = "AntiRecoil_Version2 Control Panel"
+APP_TITLE = "PicoCheat"
 
 # Default schema for the new nested structure
 DEFAULT_CONFIG = {
     "games": {},
-    "sensitivity": 5,
+    "sensitivity": 66,
+    "pull": 1.2,
     "auto_clicker": {
         "Fire_Button": "MOUSE_1",
         "Enable_Button": "Unmapped",
         "CPS": 10
     }
 }
+
+default_pattern = []
+for i in range(100):
+    if i < 10:
+        default_pattern.append([0.0, 0.0])
+    else:
+        default_pattern.append([0.0, 0.5])
 
 class MappingDialog(tk.Toplevel):
     """Reused and slightly adapted mapping dialog from your original code."""
@@ -111,6 +119,8 @@ class ControllerApp(tk.Tk):
         super().__init__()
         self.title(APP_TITLE)
         self.geometry("620x600")
+
+        #self.iconbitmap("pico.ico")
 
         self.config = self.load_config()
         self.serial_conn = None
@@ -247,13 +257,23 @@ class ControllerApp(tk.Tk):
 
         ttk.Label(content, text="Sensitivity:").pack(side=tk.LEFT, padx=5)
         sens_var = tk.IntVar(value=self.config["sensitivity"])
-        
+
         def save_sens(*args):
             self.config["sensitivity"] = sens_var.get()
             self.save_config()
 
         sens_var.trace_add("write", save_sens)
-        ttk.Spinbox(content, from_=1, to=100, textvariable=sens_var, width=10).pack(side=tk.LEFT, padx=5)
+        ttk.Spinbox(content, from_=8, to=100, textvariable=sens_var, width=10).pack(side=tk.LEFT, padx=5)
+
+        ttk.Label(content, text="Pull:").pack(side=tk.LEFT, padx=5)
+        pull_var = tk.DoubleVar(value=self.config["pull"])  # Use the configured pull value
+
+        def save_pull(*args):
+            self.config["pull"] = pull_var.get()
+            self.save_config()
+
+        pull_var.trace_add("write", save_pull)
+        ttk.Spinbox(content, from_=1.0, to=20.0, increment=0.1, textvariable=pull_var, width=10).pack(side=tk.LEFT, padx=5)
 
         btn_frame = ttk.Frame(self.main_container)
         btn_frame.pack(pady=20)
@@ -292,6 +312,16 @@ class ControllerApp(tk.Tk):
 
         for i in range(4):
             scroll_area.scrollable_frame.columnconfigure(i, weight=1)
+
+        ttk.Label(self.main_container, text="Sensitivity:").pack(side=tk.TOP, padx=5)
+        sens_var = tk.IntVar(value=self.config["sensitivity"])
+        
+        def save_sens(*args):
+            self.config["sensitivity"] = sens_var.get()
+            self.save_config()
+
+        sens_var.trace_add("write", save_sens)
+        ttk.Spinbox(self.main_container, from_=8, to=100, textvariable=sens_var, width=10).pack(side=tk.TOP, padx=5)
 
         bottom_bar = ttk.Frame(self.main_container)
         bottom_bar.pack(fill=tk.X, pady=10)
@@ -471,12 +501,12 @@ class ControllerApp(tk.Tk):
     def patternToBytes(self, filename, sensitivity):
         """Converts a pattern file into a byte array for sending to the device."""
         if filename == "Default":
-            final_patterns = [b'\x00', b'\x00']  # Placeholder for default pattern
+            final_patterns = [b'\x00', b'\x00']
             delay = bytes([80])
             yaw = sensitivity * 0.00101
-            for i in range(100):  # Example default pattern
-                final_patterns.append(bytes([round(float(0)/yaw) & 0xff]))
-                final_patterns.append(bytes([round(float(1)/yaw) & 0xff]))
+            for i in default_pattern:  # Example default pattern
+                final_patterns.append(bytes([round(float(i[0])/yaw) & 0xff]))
+                final_patterns.append(bytes([round(float(i[1] + self.config["pull"])/yaw) & 0xff]))
             return final_patterns, delay
         elif not os.path.exists(filename):
             messagebox.showerror("File Error", f"Pattern file not found: {filename}")

@@ -11,10 +11,11 @@
             "XP54": "C:/Users/ASUS/PycharmProjects/AntiRecoil_RP2040/Patterns/TheFinals/XP54.txt"
         }
     },
-    "sensitivity": 5,
+    "sensitivity": 66,
+    "pull": 1.2,
     "auto_clicker": {
         "Fire_Button": "MOUSE_1",
-        "Enable_Button": "MOUSE_4",
+        "Enable_Button": "Unmapped",
         "CPS": 10
     }
 }

@@ -13,17 +13,14 @@
 #include "tusb.h"
 #include "usb_descriptors.h"
 
-#define BUFFER_SIZE 264
-uint8_t temp_buffer[BUFFER_SIZE];
-
 hid_keyboard_report_t keyboard = {0};
 hid_mouse_report_t mouse = {0};
 
-absolute_time_t lastTime = 0, clickerTime = 0;
-int8_t lastX, lastY;
+absolute_time_t recoilTime = 0, clickerTime = 0;
 
-uint8_t Fire_Button[2] = {0}, Enable_Button[2] = {0}, cps = 0;
-bool AutoClickerEnable = false, fire = false, enable = false;
+uint8_t Fire_Button[2] = {0}, Enable_Button[2] = {0}, pattern[264][2];
+uint32_t cps = 0, delay = 0, pattern_length = 0, pattern_length_temp = 0;
+bool AntiRecoilEnable = false, AutoClickerEnable = false, fire = false, enable = false;
 
 // Helper function to check if a key is pressed in current report
 bool check(uint8_t c, uint8_t arr[]){
@@ -85,13 +82,29 @@ void mouse_report(hid_mouse_report_t const *report) {
     if(Enable_Button[1] == 3){enable = pushButton(report->buttons & Enable_Button[0]);}
 
     tud_hid_mouse_report(REPORT_ID_MOUSE, mouse.buttons, mouse.x, mouse.y, mouse.wheel, 0);
-
-    tud_cdc_write(keyboard.keycode, 6);
-    tud_cdc_write_flush();
 }
 
 void modified_task(){
     absolute_time_t now = get_absolute_time();
+
+    if(AntiRecoilEnable){
+        if(mouse.buttons & TU_BIT(0) && mouse.buttons & TU_BIT(1)){
+            if(pattern_length_temp == 0){pattern_length_temp = pattern_length;}
+
+            if((now - recoilTime) >= delay){
+                recoilTime = now;
+
+                int8_t x = pattern[pattern_length - pattern_length_temp][0];
+                int8_t y = pattern[pattern_length - pattern_length_temp][1];
+                pattern_length_temp--;
+
+                tud_hid_mouse_report(REPORT_ID_MOUSE, mouse.buttons, x, y, 0, 0);
+            }
+        }
+        else{
+            pattern_length_temp = pattern_length;
+        }
+    }
 
     if(AutoClickerEnable && enable){
         gpio_put(25, 1);
@@ -142,6 +155,7 @@ void modified_task(){
 
 void saveConfig(uint8_t* config_arr) {
     if(config_arr == NULL) { return;}
+
     else if(config_arr[0] == 0x11){
         AutoClickerEnable = true;
         cps = config_arr[1]*2;
@@ -150,9 +164,19 @@ void saveConfig(uint8_t* config_arr) {
         Enable_Button[0] = config_arr[4];
         Enable_Button[1] = config_arr[5];
     }
+
     else if(config_arr[0] == 0x10){AutoClickerEnable = false;}
 
-    for(int i = 0; i < BUFFER_SIZE; i++){
-        temp_buffer[i] = config_arr[i];
+    else if(config_arr[0] == 0x21){
+        AntiRecoilEnable = true;
+        delay = config_arr[1]*1000;
+        pattern_length = config_arr[2];
+        pattern_length_temp = pattern_length;
+        for(int i = 0; i < pattern_length; i++){
+            pattern[i][0] = config_arr[3 + i*2];
+            pattern[i][1] = config_arr[4 + i*2];
+        }
     }
+
+    else if(config_arr[0] == 0x20){AntiRecoilEnable = false;}
 }
