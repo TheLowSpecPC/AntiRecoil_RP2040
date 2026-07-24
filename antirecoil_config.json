@@ -1,0 +1,21 @@
+{
+    "games": {
+        "The Finals": {
+            "93R": "C:/Users/ASUS/PycharmProjects/AntiRecoil_RP2040/Patterns/TheFinals/93R.txt",
+            "AKM": "C:/Users/ASUS/PycharmProjects/AntiRecoil_RP2040/Patterns/TheFinals/AKM.txt",
+            "FAMAS": "C:/Users/ASUS/PycharmProjects/AntiRecoil_RP2040/Patterns/TheFinals/FAMAS.txt",
+            "FCAR": "C:/Users/ASUS/PycharmProjects/AntiRecoil_RP2040/Patterns/TheFinals/FCAR.txt",
+            "LGUN": "C:/Users/ASUS/PycharmProjects/AntiRecoil_RP2040/Patterns/TheFinals/LGUN.txt",
+            "M11": "C:/Users/ASUS/PycharmProjects/AntiRecoil_RP2040/Patterns/TheFinals/M11.txt",
+            "M60": "C:/Users/ASUS/PycharmProjects/AntiRecoil_RP2040/Patterns/TheFinals/M60.txt",
+            "XP54": "C:/Users/ASUS/PycharmProjects/AntiRecoil_RP2040/Patterns/TheFinals/XP54.txt"
+        }
+    },
+    "sensitivity": 66,
+    "pull": 1.2,
+    "auto_clicker": {
+        "Fire_Button": "MOUSE_1",
+        "Enable_Button": "Unmapped",
+        "CPS": 10
+    }
+}

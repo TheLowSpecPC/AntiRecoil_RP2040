@@ -80,8 +80,8 @@ void tud_cdc_rx_cb(uint8_t itf)
   (void) itf;
 
   char buf[64];
-  uint32_t count = tud_cdc_read(buf, sizeof(buf));
+  //uint32_t count = tud_cdc_read(buf, sizeof(buf));
 
   // TODO control LED on keyboard of host stack
-  (void) count;
+  //(void) count;
 }

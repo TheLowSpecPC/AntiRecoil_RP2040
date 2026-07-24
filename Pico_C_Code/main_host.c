@@ -41,6 +41,7 @@
 #include "pio_usb.h"
 #include "tusb.h"
 #include "usb_descriptors.h"
+#include "AntiRecoil.h"
 
 // Define UART parameters
 #define UART_ID uart0
@@ -57,6 +58,10 @@
 
 
 static uint8_t const keycode2ascii[128][2] =  { HID_KEYCODE_TO_ASCII };
+
+#define BUFFER_SIZE 264
+static uint8_t rx_buffer[BUFFER_SIZE];
+uint8_t send_buffer[BUFFER_SIZE];
 
 
 /*------------- MAIN -------------*/
@@ -101,8 +106,31 @@ void core1_main() {
   // Add the second port
   pio_usb_host_add_port(pin_dp_2, PIO_USB_PINOUT_DPDM);
 
+  // Initialize the default LED pin (GP25) as an output
+  gpio_init(25);
+  gpio_set_dir(25, GPIO_OUT);
+
   while (true) {
     tuh_task(); // tinyusb host task
+    modified_task();
+
+    if (tud_cdc_available()) {
+      // Read new data into the buffer starting at our current index
+      uint32_t count = tud_cdc_read(rx_buffer, BUFFER_SIZE);
+
+      if (rx_buffer[0] == 0xFF && rx_buffer[1] == 0xAA) {
+        gpio_put(25, 1); // Turn on LED on success
+
+        for(int i = 2; i < count; i++) {
+          send_buffer[i - 2] = rx_buffer[i];
+        }
+
+        // Save to memory
+        saveConfig(send_buffer);
+
+        sleep_ms(100);
+      } 
+    }
   }
 }
 
@@ -214,7 +242,7 @@ static void process_mouse_report(uint8_t dev_addr, hid_mouse_report_t const * re
   uint8_t payload[6] = {0xAA, 0x55, report->buttons, report->x, report->y, report->wheel};
 
   // Send the 4 bytes, blocking until they are all written to the UART FIFO
-  uart_write_blocking(UART_ID, payload, 6);
+  //uart_write_blocking(UART_ID, payload, 6);
 
   //------------- button state  -------------//
   //uint8_t button_changed_mask = report->buttons ^ prev_report.buttons;
@@ -251,11 +279,13 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance, uint8_t cons
   switch(itf_protocol)
   {
     case HID_ITF_PROTOCOL_KEYBOARD:
-      process_kbd_report(dev_addr, (hid_keyboard_report_t const*) report );
+      //process_kbd_report(dev_addr, (hid_keyboard_report_t const*) report );
+      kbd_report((hid_keyboard_report_t const*) report );
     break;
 
     case HID_ITF_PROTOCOL_MOUSE:
-      process_mouse_report(dev_addr, (hid_mouse_report_t const*) report );
+      //process_mouse_report(dev_addr, (hid_mouse_report_t const*) report );
+      mouse_report((hid_mouse_report_t const*) report );
     break;
 
     default: break;
