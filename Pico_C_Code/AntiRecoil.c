@@ -33,19 +33,51 @@ bool check(uint8_t c, uint8_t arr[]){
 
 
 uint8_t n = 0;
-bool pushButton(uint8_t now) {
-    if(now && n == 0) {
+bool output = false;
+absolute_time_t debounceTime = 0;
+
+bool pushButton(uint8_t state, absolute_time_t time) {
+    // --- ON PRESS LOGIC ---
+    
+    if(state && n == 0) {
         n = 1;
-        return true; // Button was just pressed
-    } else if(!now && n == 1) {
-        return true; // Button was just released
-    }else if(now && n == 1) {
-        n = 0;
-        return false; // Button is still pressed
-    } else if(!now && n == 0) {
-        return false; // Button is still released
+        debounceTime = time;
+        output = false; // Button was just pressed
+    } 
+    else if(!state && n == 1) {
+        n = 0; 
     }
-    return false;
+    else if(state && n == 1 && (time - debounceTime) >= 10000) {
+        n = 2;
+        debounceTime = 0;
+        output = true; // State is now ON
+    }
+    else if(!state && n == 2) {
+        n = 3;
+        output = true; // Button was just released (remains ON)
+    }
+
+    // --- OFF PRESS LOGIC ---
+    
+    else if(state && n == 3) {
+        n = 4;
+        debounceTime = time;
+        output = true; // Button is pressed again
+    }
+    else if(!state && n == 4) {
+        n = 3; 
+    }
+    else if(state && n == 4 && (time - debounceTime) >= 10000) {
+        n = 5;
+        debounceTime = 0;
+        output = false; // State is now OFF
+    }
+    else if(!state && n == 5) {
+        n = 0;
+        output = false; // Button is fully released (remains OFF)
+    }
+    
+    return output;
 }
 
 // convert hid keyboard report to hid gamepad report
@@ -63,9 +95,6 @@ void kbd_report(hid_keyboard_report_t const *report) {
     if(Fire_Button[1] == 1){fire = check(Fire_Button[0], report->keycode);}
     else if(Fire_Button[1] == 2){fire  = report->modifier & Fire_Button[0];}
 
-    if(Enable_Button[1] == 1){enable = pushButton(check(Enable_Button[0], report->keycode));}
-    else if(Enable_Button[1] == 2){enable = pushButton(report->modifier & Enable_Button[0]);}
-
     tud_hid_keyboard_report(REPORT_ID_KEYBOARD, keyboard.modifier, (uint8_t*) keyboard.keycode);
 }
 
@@ -79,7 +108,6 @@ void mouse_report(hid_mouse_report_t const *report) {
     }
 
     if(Fire_Button[1] == 3){fire = report->buttons & Fire_Button[0];}
-    if(Enable_Button[1] == 3){enable = pushButton(report->buttons & Enable_Button[0]);}
 
     tud_hid_mouse_report(REPORT_ID_MOUSE, mouse.buttons, mouse.x, mouse.y, mouse.wheel, 0);
 }
@@ -151,6 +179,13 @@ void modified_task(){
     else{
         gpio_put(25, 0);
     }
+
+    //Keyboard AutoClicker Button Check
+    if(Enable_Button[1] == 1){enable = pushButton(check(Enable_Button[0], keyboard.keycode), get_absolute_time());}
+    else if(Enable_Button[1] == 2){enable = pushButton(keyboard.modifier & Enable_Button[0], get_absolute_time());}
+
+    //Mouse AutoClicker Button Check
+    if(Enable_Button[1] == 3){enable = pushButton(mouse.buttons & Enable_Button[0], get_absolute_time());}
 }
 
 void saveConfig(uint8_t* config_arr) {

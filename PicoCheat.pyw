@@ -120,7 +120,7 @@ class ControllerApp(tk.Tk):
         self.title(APP_TITLE)
         self.geometry("620x600")
 
-        #self.iconbitmap("pico.ico")
+        self.iconbitmap("pico.ico")
 
         self.config = self.load_config()
         self.serial_conn = None
