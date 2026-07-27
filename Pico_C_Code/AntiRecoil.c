@@ -132,10 +132,6 @@ void modified_task(){
     //Mouse AutoClicker Button Check
     if(Enable_Button[1] == 3){updateButton(mouse.buttons & Enable_Button[0], &enable, now);}
 
-    updateButton(mouse.buttons & TU_BIT(2), &middle, now);
-    updateButton(mouse.buttons & TU_BIT(3), &backward, now);
-    updateButton(mouse.buttons & TU_BIT(4), &forward, now);
-
     if(AntiRecoilEnable){
         if(mouse.buttons & TU_BIT(0) && mouse.buttons & TU_BIT(1)){
             if(pattern_length_temp == 0){pattern_length_temp = pattern_length;}
@@ -201,12 +197,18 @@ void modified_task(){
         gpio_put(25, 0);
     }
 
-    if(middle.rose && middle.output){tud_cdc_write_str("Enable\r\n");}
-    else if(middle.fell && !middle.output){tud_cdc_write_str("Disable\r\n");}
+    if(defaultRecoil){
+        updateButton(mouse.buttons & TU_BIT(2), &middle, now);
+        updateButton(mouse.buttons & TU_BIT(3), &backward, now);
+        updateButton(mouse.buttons & TU_BIT(4), &forward, now);
 
-    if(middle.output && defaultRecoil){
-        if(forward.rose){tud_cdc_write_str("UP\r\n");}
-        else if(backward.rose){tud_cdc_write_str("DOWN\r\n");}
+        if(middle.rose && middle.output){tud_cdc_write_str("Enable\r\n");}
+        else if(middle.fell && !middle.output){tud_cdc_write_str("Disable\r\n");}
+
+        if(middle.output){
+            if(forward.rose){tud_cdc_write_str("UP\r\n");}
+            else if(backward.rose){tud_cdc_write_str("DOWN\r\n");}
+        }
     }
 }
 

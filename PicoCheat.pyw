@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox, simpledialog, filedialog
 import serial
 import serial.tools.list_ports
+import threading
 import json
 import os
 import time
@@ -120,7 +121,7 @@ class ControllerApp(tk.Tk):
         self.title(APP_TITLE)
         self.geometry("620x600")
 
-        self.iconbitmap("pico.ico")
+        #self.iconbitmap("pico.ico")
 
         self.config = self.load_config()
         self.serial_conn = None
@@ -246,18 +247,55 @@ class ControllerApp(tk.Tk):
 
     def show_defaultMenu(self):
         self.clear_container()
+        sens_var = tk.IntVar(value=self.config["sensitivity"])
+        pull_var = tk.DoubleVar(value=self.config["pull"])
+
+        self.stop_pull_thread = False
+
+        def read_pull():
+            # 2. Check the flag instead of looping infinitely
+            while not self.stop_pull_thread and self.serial_conn and self.serial_conn.is_open:
+                if self.serial_conn.in_waiting:
+                    try:
+                        data = self.serial_conn.read(self.serial_conn.in_waiting).decode('utf-8').strip()
+                        #print(f"Received pull data: {data}")
+
+                        if data == "Enable":
+                            self.status_var.set("Status: Pull Adjustment Enabled")
+
+                        elif data == "Disable":
+                            self.status_var.set("Status: Pull Adjustment Disabled")
+
+                        elif data == "UP":
+                            self.config["pull"] = round(self.config["pull"] + 0.1, 1)
+                            self.send_command("Start_Default_Recoil", None)
+                            self.status_var.set("Status: Incremented Pull")
+
+                        elif data == "DOWN":
+                            self.config["pull"] = round(self.config["pull"] - 0.1, 1)
+                            self.send_command("Start_Default_Recoil", None)
+                            self.status_var.set("Status: Decremented Pull")
+
+                        self.save_config()
+                        pull_var.set(self.config["pull"])
+                    except Exception as e:
+                        self.status_var.set(f"Status: Error reading pull value - {e}")
+                
+                # 3. Add a tiny sleep to prevent 100% CPU core usage
+                time.sleep(0.01)
         
+        t = threading.Thread(target=read_pull, daemon=True)
+        t.start()
+
         top_bar = ttk.Frame(self.main_container)
         top_bar.pack(fill=tk.X, pady=5)
-        ttk.Button(top_bar, text="⬅ Back", command=lambda: self.navigate(self.show_anti_recoil_menu, "anti_recoil")).pack(side=tk.LEFT)
+        ttk.Button(top_bar, text="⬅ Back", command=lambda: [setattr(self, 'stop_pull_thread', True), t.join() if t.is_alive() else None, self.navigate(self.show_anti_recoil_menu, "anti_recoil")]).pack(side=tk.LEFT)
         ttk.Label(top_bar, text="Default Config", font=("Segoe UI", 12, "bold")).pack(side=tk.LEFT, padx=10)
 
         content = ttk.Frame(self.main_container)
         content.pack(expand=True)
 
         ttk.Label(content, text="Sensitivity:").pack(side=tk.LEFT, padx=5)
-        sens_var = tk.IntVar(value=self.config["sensitivity"])
-
         def save_sens(*args):
             self.config["sensitivity"] = sens_var.get()
             self.save_config()
@@ -266,8 +304,6 @@ class ControllerApp(tk.Tk):
         ttk.Spinbox(content, from_=8, to=100, textvariable=sens_var, width=10).pack(side=tk.LEFT, padx=5)
 
         ttk.Label(content, text="Pull:").pack(side=tk.LEFT, padx=5)
-        pull_var = tk.DoubleVar(value=self.config["pull"])  # Use the configured pull value
-
         def save_pull(*args):
             self.config["pull"] = pull_var.get()
             self.save_config()
@@ -487,7 +523,7 @@ class ControllerApp(tk.Tk):
                     command.append(b'\x20')
 
                 command = b''.join(command)
-                print(f"Sending command: {command}")
+                #print(f"Sending command: {command}")
 
                 self.serial_conn.reset_input_buffer()
                 self.serial_conn.write(command)
