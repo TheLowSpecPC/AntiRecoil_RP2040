@@ -477,11 +477,11 @@ class ControllerApp(tk.Tk):
 
                 elif message[0] == "Start_Anti_Recoil":
                     pattern, delay = self.patternToBytes(self.config["games"][message[1]][message[2]], self.config["sensitivity"])
-                    command += [b'\x21', delay, bytes([int(len(pattern)/2)])] + pattern
+                    command += [b'\x21', b'\x00', delay, bytes([int(len(pattern)/2)])] + pattern
 
                 elif message[0] == "Start_Default_Recoil":
                     pattern, delay = self.patternToBytes("Default", self.config["sensitivity"])
-                    command += [b'\x21', delay, bytes([int(len(pattern)/2)])] + pattern
+                    command += [b'\x21', b'\x01', delay, bytes([int(len(pattern)/2)])] + pattern  # Indicate default pattern
 
                 elif message[0] == "Stop_Anti_Recoil" or message[0] == "Stop_Default_Recoil":
                     command.append(b'\x20')

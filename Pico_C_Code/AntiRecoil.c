@@ -20,7 +20,7 @@ absolute_time_t recoilTime = 0, clickerTime = 0;
 
 uint8_t Fire_Button[2] = {0}, Enable_Button[2] = {0}, pattern[264][2];
 uint32_t cps = 0, delay = 0, pattern_length = 0, pattern_length_temp = 0;
-bool AntiRecoilEnable = false, AutoClickerEnable = false, fire = false, enable = false;
+bool AntiRecoilEnable = false, AutoClickerEnable = false, fire = false, defaultRecoil = false;
 
 // Helper function to check if a key is pressed in current report
 bool check(uint8_t c, uint8_t arr[]){
@@ -31,64 +31,74 @@ bool check(uint8_t c, uint8_t arr[]){
     return false;
 }
 
+typedef struct {
+    uint8_t n;
+    bool output;
+    absolute_time_t debounceTime;
+    bool rose; // Triggers once when output turns true
+    bool fell; // Triggers once when output turns false
+} DebounceState;
 
-uint8_t n = 0;
-bool output = false;
-absolute_time_t debounceTime = 0;
+// Initialize your buttons (all false/0 by default)
+DebounceState enable = {0}, middle = {0}, forward = {0}, backward = {0};
 
-bool pushButton(uint8_t state, absolute_time_t time) {
-    // --- ON PRESS LOGIC ---
-    
-    if(state && n == 0) {
-        n = 1;
-        debounceTime = time;
-        output = false; // Button was just pressed
+void updateButton(uint8_t state, DebounceState* button, absolute_time_t time) {
+    // 1. Reset edge detectors
+    button->rose = false;
+    button->fell = false;
+
+    // --- ON PRESS LOGIC (Toggle turns ON) ---
+    if(state && button->n == 0) {
+        button->n = 1;
+        button->debounceTime = time;
+        button->output = false; 
     } 
-    else if(!state && n == 1) {
-        n = 0; 
+    else if(!state && button->n == 1) {
+        button->n = 0; 
     }
-    else if(state && n == 1 && (time - debounceTime) >= 10000) {
-        n = 2;
-        debounceTime = 0;
-        output = true; // State is now ON
+    else if(state && button->n == 1 && (time - button->debounceTime) >= 10000) {
+        button->n = 2;
+        button->debounceTime = 0;
+        button->output = true; 
+        button->rose = true; // Physical Press 1 (Debounced)
     }
-    else if(!state && n == 2) {
-        n = 3;
-        output = true; // Button was just released (remains ON)
+    else if(!state && button->n == 2) {
+        button->n = 3;
+        button->output = true; 
+        button->fell = true; // Physical Release 1
     }
 
-    // --- OFF PRESS LOGIC ---
-    
-    else if(state && n == 3) {
-        n = 4;
-        debounceTime = time;
-        output = true; // Button is pressed again
+    // --- OFF PRESS LOGIC (Toggle turns OFF) ---
+    else if(state && button->n == 3) {
+        button->n = 4;
+        button->debounceTime = time;
+        button->output = true; 
     }
-    else if(!state && n == 4) {
-        n = 3; 
+    else if(!state && button->n == 4) {
+        button->n = 3; 
     }
-    else if(state && n == 4 && (time - debounceTime) >= 10000) {
-        n = 5;
-        debounceTime = 0;
-        output = false; // State is now OFF
+    else if(state && button->n == 4 && (time - button->debounceTime) >= 10000) {
+        button->n = 5;
+        button->debounceTime = 0;
+        button->output = false; 
+        button->rose = true; // Physical Press 2 (Debounced)
     }
-    else if(!state && n == 5) {
-        n = 0;
-        output = false; // Button is fully released (remains OFF)
+    else if(!state && button->n == 5) {
+        button->n = 0;
+        button->output = false; 
+        button->fell = true; // Physical Release 2
     }
-    
-    return output;
 }
 
 // convert hid keyboard report to hid gamepad report
 void kbd_report(hid_keyboard_report_t const *report) {
     for(int i = 0; i < 6; i++){
-        if(Fire_Button[1] == 1 && AutoClickerEnable && fire && enable){continue;} // Skip rapid fire button if enabled
+        if(Fire_Button[1] == 1 && AutoClickerEnable && fire && enable.output){continue;} // Skip rapid fire button if enabled
         else{keyboard.keycode[i] = report->keycode[i];}
     }
 
     for(int i = 0; i < 8; i++){
-        if(Fire_Button[1] == 2 && AutoClickerEnable && fire && enable){continue;} // Skip rapid fire button if enabled
+        if(Fire_Button[1] == 2 && AutoClickerEnable && fire && enable.output){continue;} // Skip rapid fire button if enabled
         else{keyboard.modifier = report->modifier & TU_BIT(i) ? keyboard.modifier | TU_BIT(i) : keyboard.modifier & ~TU_BIT(i);}
     }
 
@@ -103,7 +113,7 @@ void mouse_report(hid_mouse_report_t const *report) {
     mouse.x = report->x; mouse.y = report->y; mouse.wheel = report->wheel;
 
     for(int i = 0; i < 5; i++){
-        if(Fire_Button[1] == 3 && AutoClickerEnable && fire && enable){continue;} // Skip rapid fire button if enabled
+        if(Fire_Button[1] == 3 && AutoClickerEnable && fire && enable.output){continue;} // Skip rapid fire button if enabled
         else{mouse.buttons = report->buttons & TU_BIT(i) ? mouse.buttons | TU_BIT(i) : mouse.buttons & ~TU_BIT(i);}
     }
 
@@ -114,6 +124,17 @@ void mouse_report(hid_mouse_report_t const *report) {
 
 void modified_task(){
     absolute_time_t now = get_absolute_time();
+
+    //Keyboard AutoClicker Button Check
+    if(Enable_Button[1] == 1){updateButton(check(Enable_Button[0], keyboard.keycode), &enable, now);}
+    else if(Enable_Button[1] == 2){updateButton(keyboard.modifier & Enable_Button[0], &enable, now);}
+
+    //Mouse AutoClicker Button Check
+    if(Enable_Button[1] == 3){updateButton(mouse.buttons & Enable_Button[0], &enable, now);}
+
+    updateButton(mouse.buttons & TU_BIT(2), &middle, now);
+    updateButton(mouse.buttons & TU_BIT(3), &backward, now);
+    updateButton(mouse.buttons & TU_BIT(4), &forward, now);
 
     if(AntiRecoilEnable){
         if(mouse.buttons & TU_BIT(0) && mouse.buttons & TU_BIT(1)){
@@ -134,7 +155,7 @@ void modified_task(){
         }
     }
 
-    if(AutoClickerEnable && enable){
+    if(AutoClickerEnable && enable.output){
         gpio_put(25, 1);
         if(fire){
             if((now - clickerTime) >= 1000000/cps){
@@ -180,12 +201,13 @@ void modified_task(){
         gpio_put(25, 0);
     }
 
-    //Keyboard AutoClicker Button Check
-    if(Enable_Button[1] == 1){enable = pushButton(check(Enable_Button[0], keyboard.keycode), get_absolute_time());}
-    else if(Enable_Button[1] == 2){enable = pushButton(keyboard.modifier & Enable_Button[0], get_absolute_time());}
+    if(middle.rose && middle.output){tud_cdc_write_str("Enable\r\n");}
+    else if(middle.fell && !middle.output){tud_cdc_write_str("Disable\r\n");}
 
-    //Mouse AutoClicker Button Check
-    if(Enable_Button[1] == 3){enable = pushButton(mouse.buttons & Enable_Button[0], get_absolute_time());}
+    if(middle.output && defaultRecoil){
+        if(forward.rose){tud_cdc_write_str("UP\r\n");}
+        else if(backward.rose){tud_cdc_write_str("DOWN\r\n");}
+    }
 }
 
 void saveConfig(uint8_t* config_arr) {
@@ -204,14 +226,18 @@ void saveConfig(uint8_t* config_arr) {
 
     else if(config_arr[0] == 0x21){
         AntiRecoilEnable = true;
-        delay = config_arr[1]*1000;
-        pattern_length = config_arr[2];
+        defaultRecoil = config_arr[1] == 0x01 ? true : false;
+        delay = config_arr[2]*1000;
+        pattern_length = config_arr[3];
         pattern_length_temp = pattern_length;
         for(int i = 0; i < pattern_length; i++){
-            pattern[i][0] = config_arr[3 + i*2];
-            pattern[i][1] = config_arr[4 + i*2];
+            pattern[i][0] = config_arr[4 + i*2];
+            pattern[i][1] = config_arr[5 + i*2];
         }
     }
 
-    else if(config_arr[0] == 0x20){AntiRecoilEnable = false;}
+    else if(config_arr[0] == 0x20){
+        AntiRecoilEnable = false; 
+        defaultRecoil = false;
+    }
 }

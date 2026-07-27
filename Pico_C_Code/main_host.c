@@ -128,7 +128,7 @@ void core1_main() {
         // Save to memory
         saveConfig(send_buffer);
 
-        sleep_ms(100);
+        //sleep_ms(100);
       } 
     }
   }
